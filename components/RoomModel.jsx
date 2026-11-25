@@ -1,8 +1,34 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
+import { withBasePath } from '@/lib/assetPath';
+
+const ROOM_MODEL_URL = withBasePath('/models/room.glb');
+
+const STATION_HOTSPOTS = {
+  ART: {
+    objectNames: ['Art_Canvas_WIP'],
+    highlightColor: new THREE.Color('#fff4db'),
+    highlightIntensity: 0.14,
+  },
+  TECH: {
+    objectNames: ['Tech_Monitor_Left_Screen', 'Tech_Monitor_Right_Screen'],
+    highlightColor: new THREE.Color('#d8fff1'),
+    highlightIntensity: 0.18,
+  },
+};
+
+function findAncestorMatch(object, targetNames) {
+  let curr = object;
+  while (curr) {
+    const trimmedName = curr.name ? curr.name.trim() : '';
+    if (targetNames.includes(trimmedName)) return trimmedName;
+    curr = curr.parent;
+  }
+  return null;
+}
 
 // Map trimmed GLB mesh/group names to canonical portfolio station IDs
 const INTERACTIVE_TARGETS = {
@@ -58,16 +84,46 @@ const INTERACTIVE_TARGETS = {
 };
 
 export default function RoomModel({
+  activeView = 'OVERVIEW',
+  settledSection = null,
   onSelectSection,
+  onOpenStationPortfolio,
+  onHoverHotspot,
   onLightsLoaded,
 }) {
-  const { scene, nodes } = useGLTF('/models/room.glb');
+  const { scene, nodes } = useGLTF(ROOM_MODEL_URL);
+  const [hoveredTarget, setHoveredTarget] = useState(null);
+  const hotspotMaterialsRef = useRef([]);
 
-  // Configure shadows & extract LightPos_* Empty coordinates on load
+  const activeHotspotStation =
+    activeView && activeView === settledSection && STATION_HOTSPOTS[activeView]
+      ? activeView
+      : null;
+
+  // Configure shadows, cache interactive hotspot materials, & extract LightPos_* Empty coordinates on load
   useEffect(() => {
+    const hotspotMaterials = [];
+
     scene.traverse((child) => {
       if (!child.isMesh) return;
       const lowerName = child.name.trim().toLowerCase();
+
+      for (const [stationId, hotspot] of Object.entries(STATION_HOTSPOTS)) {
+        const targetName = findAncestorMatch(child, hotspot.objectNames);
+        if (targetName && child.material && 'emissive' in child.material) {
+          child.material = child.material.clone();
+          hotspotMaterials.push({
+            stationId,
+            targetName,
+            material: child.material,
+            baseEmissive: child.material.emissive.clone(),
+            baseIntensity: child.material.emissiveIntensity ?? 1,
+            highlightColor: hotspot.highlightColor,
+            highlightIntensity: hotspot.highlightIntensity,
+          });
+          break;
+        }
+      }
 
       // Prevent window glass and exterior backdrop from blocking directional sunlight
       if (lowerName.includes('glass')) {
@@ -88,6 +144,8 @@ export default function RoomModel({
         child.receiveShadow = true;
       }
     });
+
+    hotspotMaterialsRef.current = hotspotMaterials;
 
     const nightstandEmpty =
       nodes.LightPos_Nightstand || scene.getObjectByName('LightPos_Nightstand');
@@ -119,6 +177,33 @@ export default function RoomModel({
     };
   }, [scene, nodes, onLightsLoaded]);
 
+  // Clear hover state whenever the camera leaves a zoomed-in hotspot station
+  useEffect(() => {
+    if (!activeHotspotStation) {
+      setHoveredTarget(null);
+      onHoverHotspot?.(null);
+      document.body.style.cursor = 'auto';
+    }
+  }, [activeHotspotStation, onHoverHotspot]);
+
+  // Subtle emissive highlight on interactive station meshes when hovered while zoomed in
+  useEffect(() => {
+    for (const entry of hotspotMaterialsRef.current) {
+      const isHovered =
+        activeHotspotStation === entry.stationId &&
+        hoveredTarget?.stationId === entry.stationId &&
+        hoveredTarget?.targetName === entry.targetName;
+
+      if (isHovered) {
+        entry.material.emissive.copy(entry.highlightColor);
+        entry.material.emissiveIntensity = entry.highlightIntensity;
+      } else {
+        entry.material.emissive.copy(entry.baseEmissive);
+        entry.material.emissiveIntensity = entry.baseIntensity;
+      }
+    }
+  }, [activeHotspotStation, hoveredTarget]);
+
   const resolveSection = (object) => {
     let curr = object;
     while (curr) {
@@ -132,18 +217,57 @@ export default function RoomModel({
   };
 
   const handlePointerOver = (e) => {
+    e.stopPropagation();
     const section = resolveSection(e.object);
+
+    if (activeHotspotStation) {
+      const targetName = findAncestorMatch(
+        e.object,
+        STATION_HOTSPOTS[activeHotspotStation].objectNames
+      );
+      if (targetName) {
+        document.body.style.cursor = 'pointer';
+        setHoveredTarget({ stationId: activeHotspotStation, targetName });
+        onHoverHotspot?.(activeHotspotStation);
+      } else {
+        setHoveredTarget(null);
+        onHoverHotspot?.(null);
+        document.body.style.cursor =
+          section && section !== activeHotspotStation ? 'pointer' : 'auto';
+      }
+      return;
+    }
+
+    setHoveredTarget(null);
+    onHoverHotspot?.(null);
     if (section) {
-      e.stopPropagation();
       document.body.style.cursor = 'pointer';
     }
   };
 
-  const handlePointerOut = () => {
+  const handlePointerOut = (e) => {
+    e.stopPropagation();
+    setHoveredTarget(null);
+    onHoverHotspot?.(null);
     document.body.style.cursor = 'auto';
   };
 
   const handleClick = (e) => {
+    // Ignore drag-releases from OrbitControls so orbiting doesn't trigger accidental clicks
+    if (e.delta > 5) return;
+
+    if (activeHotspotStation) {
+      const targetName = findAncestorMatch(
+        e.object,
+        STATION_HOTSPOTS[activeHotspotStation].objectNames
+      );
+      if (targetName) {
+        e.stopPropagation();
+        onOpenStationPortfolio?.(activeHotspotStation);
+        return;
+      }
+    }
+
     const section = resolveSection(e.object);
     if (section && onSelectSection) {
       e.stopPropagation();
@@ -161,4 +285,4 @@ export default function RoomModel({
   );
 }
 
-useGLTF.preload('/models/room.glb');
+useGLTF.preload(ROOM_MODEL_URL);

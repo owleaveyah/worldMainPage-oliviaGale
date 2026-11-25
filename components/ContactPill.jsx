@@ -40,7 +40,7 @@ export default function ContactPill({ isDarkMode }) {
       {isOpen && (
         <div
           className={clsx(
-            'mb-3 w-80 p-4 rounded-2xl border backdrop-blur-xl shadow-2xl transition-all duration-200 animate-in fade-in slide-in-from-bottom-2',
+            'mb-3 w-96 p-5 rounded-2xl border backdrop-blur-xl shadow-2xl transition-all duration-200 animate-in fade-in slide-in-from-bottom-2',
             isDarkMode
               ? 'bg-neutral-900/90 border-neutral-800 text-neutral-100'
               : 'bg-white/90 border-neutral-200 text-neutral-900'
@@ -48,25 +48,25 @@ export default function ContactPill({ isDarkMode }) {
         >
           <div className="flex items-center justify-between pb-3 border-b border-neutral-200/50 dark:border-neutral-800/80">
             <div>
-              <h3 className="text-sm font-semibold tracking-tight">Olivia Gale</h3>
-              <p className="text-[11px] text-neutral-500 dark:text-neutral-400">
+              <h3 className="font-display text-base font-semibold tracking-tight">Olivia Gale</h3>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400">
                 Ready for Q1/Q2 3D Technical & Design Roles
               </p>
             </div>
-            <span className="flex h-2 w-2 relative">
+            <span className="flex h-2.5 w-2.5 relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
             </span>
           </div>
 
           {/* Quick Email Copy Row */}
-          <div className="mt-3">
-            <span className="text-[10px] font-medium uppercase tracking-wider text-neutral-400">
+          <div className="mt-3.5">
+            <span className="text-xs font-medium uppercase tracking-wider text-neutral-400">
               Direct Contact
             </span>
             <div
               className={clsx(
-                'mt-1 flex items-center justify-between p-2 rounded-lg border text-xs font-mono',
+                'mt-1.5 flex items-center justify-between p-2.5 rounded-lg border text-sm font-mono',
                 isDarkMode ? 'bg-neutral-950/60 border-neutral-800' : 'bg-neutral-50 border-neutral-200'
               )}
             >
@@ -84,23 +84,23 @@ export default function ContactPill({ isDarkMode }) {
                     : 'hover:bg-neutral-200 text-neutral-700'
                 )}
               >
-                {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               </button>
             </div>
           </div>
 
           {/* External Social Profiles */}
-          <div className="mt-4 pt-3 border-t border-neutral-200/50 dark:border-neutral-800/80 flex items-center justify-between">
+          <div className="mt-4 pt-3.5 border-t border-neutral-200/50 dark:border-neutral-800/80 flex items-center justify-between">
             <a
               href="https://linkedin.com"
               target="_blank"
               rel="noreferrer"
               className={clsx(
-                'flex items-center gap-1.5 text-xs font-medium py-1 px-2 rounded-md transition-colors',
+                'flex items-center gap-1.5 text-sm font-medium py-1 px-2 rounded-md transition-colors',
                 isDarkMode ? 'hover:bg-neutral-800 text-neutral-300' : 'hover:bg-neutral-100 text-neutral-700'
               )}
             >
-              <LinkedInIcon className="w-3.5 h-3.5" />
+              <LinkedInIcon className="w-4 h-4" />
               <span>LinkedIn</span>
             </a>
             <a
@@ -108,11 +108,11 @@ export default function ContactPill({ isDarkMode }) {
               target="_blank"
               rel="noreferrer"
               className={clsx(
-                'flex items-center gap-1.5 text-xs font-medium py-1 px-2 rounded-md transition-colors',
+                'flex items-center gap-1.5 text-sm font-medium py-1 px-2 rounded-md transition-colors',
                 isDarkMode ? 'hover:bg-neutral-800 text-neutral-300' : 'hover:bg-neutral-100 text-neutral-700'
               )}
             >
-              <Palette className="w-3.5 h-3.5" />
+              <Palette className="w-4 h-4" />
               <span>ArtStation</span>
             </a>
             <a
@@ -120,36 +120,36 @@ export default function ContactPill({ isDarkMode }) {
               target="_blank"
               rel="noreferrer"
               className={clsx(
-                'flex items-center gap-1.5 text-xs font-medium py-1 px-2 rounded-md transition-colors',
+                'flex items-center gap-1.5 text-sm font-medium py-1 px-2 rounded-md transition-colors',
                 isDarkMode ? 'hover:bg-neutral-800 text-neutral-300' : 'hover:bg-neutral-100 text-neutral-700'
               )}
             >
-              <GitHubIcon className="w-3.5 h-3.5" />
+              <GitHubIcon className="w-4 h-4" />
               <span>GitHub</span>
             </a>
           </div>
         </div>
       )}
 
-      {/* Trigger Pill Button */}
+      {/* Trigger Hoverable Text */}
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={clsx(
-          'flex items-center gap-2.5 px-4 py-2.5 rounded-full border backdrop-blur-xl shadow-xl transition-all duration-200 cursor-pointer group',
+          'flex items-center gap-3 py-1.5 transition-all duration-200 cursor-pointer group bg-transparent border-0',
           isDarkMode
-            ? 'bg-neutral-900/85 border-neutral-700 text-neutral-100 hover:border-neutral-500 hover:bg-neutral-800'
-            : 'bg-white/85 border-neutral-300 text-neutral-900 hover:border-neutral-400 hover:bg-white'
+            ? 'text-neutral-200 hover:text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.55)]'
+            : 'text-neutral-700 hover:text-neutral-950 drop-shadow-[0_1px_6px_rgba(255,255,255,0.7)]'
         )}
       >
-        <span className="flex h-2.5 w-2.5 relative">
+        <span className="flex h-3 w-3 relative">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
         </span>
-        <span className="text-xs font-semibold tracking-wide">
+        <span className="font-display text-base lg:text-lg font-semibold tracking-wide group-hover:underline underline-offset-4">
           {isOpen ? 'Close Contact' : 'Get in Touch'}
         </span>
-        <MessageSquare className="w-4 h-4 text-neutral-400 group-hover:text-emerald-500 transition-colors" />
+        <MessageSquare className="w-5 h-5 text-neutral-400 group-hover:text-emerald-400 transition-colors" />
       </button>
     </div>
   );

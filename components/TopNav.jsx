@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Sun, Moon, Sparkles } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 import clsx from 'clsx';
+import { withBasePath } from '@/lib/assetPath';
 
 const STATIONS = [
   { id: 'OVERVIEW', label: 'Overview' },
@@ -14,8 +15,15 @@ const STATIONS = [
 
 export default function TopNav({ activeStation, onSelectStation, isDarkMode, onToggleDarkMode }) {
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 px-4 py-3 sm:px-6 pointer-events-none">
-      <div className="max-w-7xl mx-auto flex items-center justify-between pointer-events-auto">
+    <header
+      className={clsx(
+        'fixed top-0 left-0 right-0 z-40 px-5 py-2 sm:px-8 sm:py-3 pointer-events-none transition-colors duration-500',
+        isDarkMode
+          ? 'bg-gradient-to-b from-black/45 via-black/15 to-transparent'
+          : 'bg-gradient-to-b from-white/55 via-white/20 to-transparent'
+      )}
+    >
+      <div className="max-w-[90rem] mx-auto flex items-center justify-between gap-6 pointer-events-auto">
         {/* Brand / Logo */}
         <div
           role="button"
@@ -25,32 +33,36 @@ export default function TopNav({ activeStation, onSelectStation, isDarkMode, onT
             if (e.key === 'Enter' || e.key === ' ') onSelectStation('OVERVIEW');
           }}
           className={clsx(
-            'flex items-center gap-2.5 px-3 py-1.5 rounded-full cursor-pointer backdrop-blur-md transition-all border',
+            'group flex items-center gap-4 sm:gap-5 cursor-pointer shrink-0 transition-opacity duration-200 hover:opacity-85',
             isDarkMode
-              ? 'bg-neutral-900/70 border-neutral-800 text-neutral-100 hover:border-neutral-700 shadow-lg shadow-black/40'
-              : 'bg-white/70 border-neutral-200 text-neutral-900 hover:border-neutral-300 shadow-md shadow-neutral-200/50'
+              ? 'text-neutral-100 drop-shadow-[0_1px_8px_rgba(0,0,0,0.45)]'
+              : 'text-neutral-900 drop-shadow-[0_1px_6px_rgba(255,255,255,0.6)]'
           )}
         >
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+          <img
+            src={withBasePath('/images/og-logo.png')}
+            alt="Olivia Gale logo"
+            className="w-28 h-28 sm:w-36 sm:h-36 object-contain shrink-0 transition-transform duration-200 group-hover:scale-105"
+          />
           <div className="flex flex-col">
-            <span className="text-xs font-semibold tracking-wide uppercase leading-tight">
+            <span className="font-display text-xl sm:text-2xl font-semibold tracking-wider uppercase leading-tight">
               Olivia Gale
             </span>
-            <span className="text-[10px] text-neutral-400 leading-none">
+            <span
+              className={clsx(
+                'text-xs sm:text-sm font-medium leading-tight tracking-wide',
+                isDarkMode ? 'text-neutral-300' : 'text-neutral-600'
+              )}
+            >
               3D Technical Artist & Designer
             </span>
           </div>
         </div>
 
-        {/* Anchor Pills */}
+        {/* Spread Hoverable Text Navigation */}
         <nav
           aria-label="Room Stations"
-          className={clsx(
-            'hidden md:flex items-center gap-1 p-1 rounded-full border backdrop-blur-md transition-colors',
-            isDarkMode
-              ? 'bg-neutral-900/70 border-neutral-800 shadow-lg shadow-black/40'
-              : 'bg-white/70 border-neutral-200 shadow-md shadow-neutral-200/50'
-          )}
+          className="hidden md:flex flex-1 max-w-3xl mx-4 lg:mx-10 items-center justify-between gap-5"
         >
           {STATIONS.map((st) => {
             const isActive = activeStation === st.id;
@@ -60,50 +72,54 @@ export default function TopNav({ activeStation, onSelectStation, isDarkMode, onT
                 type="button"
                 onClick={() => onSelectStation(st.id)}
                 className={clsx(
-                  'px-3.5 py-1 text-xs font-medium rounded-full transition-all duration-200 cursor-pointer',
+                  'group relative py-1 font-display text-base lg:text-lg tracking-wide transition-colors duration-200 cursor-pointer whitespace-nowrap bg-transparent border-0',
+                  isDarkMode
+                    ? 'drop-shadow-[0_1px_8px_rgba(0,0,0,0.55)]'
+                    : 'drop-shadow-[0_1px_6px_rgba(255,255,255,0.7)]',
                   isActive
                     ? isDarkMode
-                      ? 'bg-neutral-100 text-neutral-950 shadow-sm'
-                      : 'bg-neutral-900 text-white shadow-sm'
+                      ? 'text-white font-semibold'
+                      : 'text-neutral-950 font-semibold'
                     : isDarkMode
-                    ? 'text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/60'
-                    : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100/70'
+                    ? 'text-neutral-300/80 hover:text-white font-medium'
+                    : 'text-neutral-600 hover:text-neutral-950 font-medium'
                 )}
               >
-                {st.label}
+                <span>{st.label}</span>
+                <span
+                  className={clsx(
+                    'absolute left-0 right-0 -bottom-0.5 h-[2px] rounded-full transition-transform duration-200 origin-left',
+                    isDarkMode ? 'bg-emerald-400' : 'bg-emerald-600',
+                    isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100 opacity-70'
+                  )}
+                />
               </button>
             );
           })}
         </nav>
 
-        {/* Right HUD Controls: Dark Mode Toggle */}
-        <div className="flex items-center gap-2">
+        {/* Right HUD Control: Hoverable Theme Toggle */}
+        <div className="flex items-center shrink-0">
           <button
             type="button"
             onClick={onToggleDarkMode}
             aria-label="Toggle daylight / dark mode"
             className={clsx(
-              'p-2 rounded-full border backdrop-blur-md transition-all cursor-pointer flex items-center justify-center',
+              'flex items-center gap-2 py-1 font-display text-base lg:text-lg font-medium cursor-pointer transition-all duration-200 bg-transparent border-0',
               isDarkMode
-                ? 'bg-neutral-900/70 border-neutral-800 text-amber-300 hover:bg-neutral-800 shadow-lg'
-                : 'bg-white/70 border-neutral-200 text-neutral-700 hover:bg-neutral-100 shadow-md'
+                ? 'text-amber-300 hover:text-amber-200 drop-shadow-[0_1px_8px_rgba(0,0,0,0.55)]'
+                : 'text-neutral-700 hover:text-neutral-950 drop-shadow-[0_1px_6px_rgba(255,255,255,0.7)]'
             )}
           >
-            {isDarkMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+            {isDarkMode ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+            <span className="hidden sm:inline">{isDarkMode ? 'Night' : 'Day'}</span>
           </button>
         </div>
       </div>
 
       {/* Mobile Station Strip */}
-      <div className="md:hidden mt-2 flex items-center justify-center pointer-events-auto">
-        <div
-          className={clsx(
-            'flex items-center gap-1 p-1 rounded-full border backdrop-blur-md overflow-x-auto max-w-full',
-            isDarkMode
-              ? 'bg-neutral-900/80 border-neutral-800'
-              : 'bg-white/80 border-neutral-200'
-          )}
-        >
+      <div className="md:hidden mt-3 flex items-center justify-center pointer-events-auto">
+        <div className="flex items-center justify-between gap-5 overflow-x-auto max-w-full px-1">
           {STATIONS.map((st) => {
             const isActive = activeStation === st.id;
             return (
@@ -112,17 +128,24 @@ export default function TopNav({ activeStation, onSelectStation, isDarkMode, onT
                 type="button"
                 onClick={() => onSelectStation(st.id)}
                 className={clsx(
-                  'px-2.5 py-1 text-[11px] font-medium rounded-full whitespace-nowrap transition-colors cursor-pointer',
+                  'relative py-1 font-display text-sm sm:text-base tracking-wide whitespace-nowrap transition-colors cursor-pointer bg-transparent border-0',
                   isActive
                     ? isDarkMode
-                      ? 'bg-neutral-100 text-neutral-950'
-                      : 'bg-neutral-900 text-white'
+                      ? 'text-white font-semibold'
+                      : 'text-neutral-950 font-semibold'
                     : isDarkMode
-                    ? 'text-neutral-400'
-                    : 'text-neutral-600'
+                    ? 'text-neutral-300/80 hover:text-white font-medium'
+                    : 'text-neutral-600 hover:text-neutral-950 font-medium'
                 )}
               >
-                {st.label}
+                <span>{st.label}</span>
+                <span
+                  className={clsx(
+                    'absolute left-0 right-0 -bottom-0.5 h-[2px] rounded-full transition-transform duration-200',
+                    isDarkMode ? 'bg-emerald-400' : 'bg-emerald-600',
+                    isActive ? 'scale-x-100' : 'scale-x-0'
+                  )}
+                />
               </button>
             );
           })}

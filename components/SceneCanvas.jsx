@@ -6,7 +6,15 @@ import SceneLighting from './SceneLighting';
 import CameraRig from './CameraRig';
 import RoomModel from './RoomModel';
 
-export default function SceneCanvas({ activeView, setActiveView, isDarkMode }) {
+export default function SceneCanvas({
+  activeView,
+  setActiveView,
+  isDarkMode,
+  settledSection,
+  onArriveSection,
+  onOpenStationPortfolio,
+  onHoverHotspot,
+}) {
   const [lightPositions, setLightPositions] = useState({
     nightstand: null,
     artCeiling: null,
@@ -34,10 +42,17 @@ export default function SceneCanvas({ activeView, setActiveView, isDarkMode }) {
             isDarkMode={isDarkMode}
             lightPositions={lightPositions}
           />
-          <CameraRig activeView={activeView} />
+          <CameraRig
+            activeView={activeView}
+            onArriveSection={onArriveSection}
+          />
           <RoomModel
+            activeView={activeView}
+            settledSection={settledSection}
             isDarkMode={isDarkMode}
             onSelectSection={setActiveView}
+            onOpenStationPortfolio={onOpenStationPortfolio}
+            onHoverHotspot={onHoverHotspot}
             onLightsLoaded={setLightPositions}
           />
         </Suspense>
