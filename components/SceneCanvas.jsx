@@ -1,21 +1,25 @@
 'use client';
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import SceneLighting from './SceneLighting';
 import CameraRig from './CameraRig';
 import RoomModel from './RoomModel';
 
 export default function SceneCanvas({ activeView, setActiveView, isDarkMode }) {
+  const [lightPositions, setLightPositions] = useState({
+    nightstand: null,
+    artCeiling: null,
+  });
+
   return (
     <div className="w-full h-full relative">
       <Canvas
-        orthographic
         shadows
         camera={{
-          zoom: 84, // Calibrated so upper walls and floor corners fit neatly without top cropping
-          position: [7.8, 6.2, 8.8], // Adjusted z-depth and elevation
-          near: -50,
+          fov: 42, // Overridden dynamically by exported 27mm Blender cameras when present
+          position: [8.2, 6.4, 8.8],
+          near: 0.1,
           far: 100,
         }}
         gl={{
@@ -26,12 +30,15 @@ export default function SceneCanvas({ activeView, setActiveView, isDarkMode }) {
       >
         <color attach="background" args={[isDarkMode ? '#0f1115' : '#f5f3ef']} />
         <Suspense fallback={null}>
-          <SceneLighting isDarkMode={isDarkMode} />
+          <SceneLighting
+            isDarkMode={isDarkMode}
+            lightPositions={lightPositions}
+          />
           <CameraRig activeView={activeView} />
           <RoomModel
-            activeView={activeView}
             isDarkMode={isDarkMode}
             onSelectSection={setActiveView}
+            onLightsLoaded={setLightPositions}
           />
         </Suspense>
       </Canvas>

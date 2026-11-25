@@ -2,49 +2,51 @@
 
 import React from 'react';
 
-export default function SceneLighting({ isDarkMode }) {
+export default function SceneLighting({ isDarkMode, lightPositions }) {
   return (
     <>
-      {/* Daylight State: Window Sunlight */}
-      <directionalLight
-        position={[-9, 11, -3]}
-        intensity={isDarkMode ? 0.0 : 2.5}
-        color="#fffbf2"
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        shadow-bias={-0.0001}
-      />
+      {/* Base Ambient Fill */}
       <ambientLight
-        intensity={isDarkMode ? 0.05 : 0.45}
-        color={isDarkMode ? '#0a0e17' : '#faf6f0'}
+        intensity={isDarkMode ? 0.18 : 0.55}
+        color={isDarkMode ? '#0b132b' : '#fffcf5'}
       />
 
-      {/* Dark Mode State: Screen Glow & Interior Lamps */}
-      {isDarkMode && (
-        <>
-          {/* Dual Monitors Glow */}
-          <pointLight
-            position={[-3.1, 1.6, -0.3]}
-            intensity={3.2}
-            distance={5.0}
-            color="#00e5ff"
-          />
-          {/* Desk Lamp */}
-          <pointLight
-            position={[-3.3, 2.0, 0.5]}
-            intensity={1.8}
-            distance={3.5}
-            color="#ffb366"
-          />
-          {/* Bedside Lamp */}
-          <pointLight
-            position={[3.2, 1.5, -3.2]}
-            intensity={2.2}
-            distance={4.0}
-            color="#ff9944"
-          />
-        </>
+      {/* Daylight Window Sun (Active in Daylight Mode ONLY) */}
+      <directionalLight
+        position={[-8, 10, -4]}
+        intensity={isDarkMode ? 0 : 2.3}
+        color="#fff4e0"
+        castShadow
+        shadow-mapSize={[2048, 2048]}
+        shadow-bias={-0.0004}
+        shadow-camera-left={-8}
+        shadow-camera-right={8}
+        shadow-camera-top={8}
+        shadow-camera-bottom={-8}
+        shadow-camera-near={0.5}
+        shadow-camera-far={30}
+      />
+
+      {/* Nightstand Lamp (Active in Night Mode ONLY) */}
+      {isDarkMode && lightPositions?.nightstand && (
+        <pointLight
+          position={lightPositions.nightstand}
+          color="#ff9e44"
+          intensity={18}
+          distance={7.5}
+          decay={2}
+        />
+      )}
+
+      {/* Far-Left Art Corner Ceiling Light (Active in Night Mode ONLY) */}
+      {isDarkMode && lightPositions?.artCeiling && (
+        <pointLight
+          position={lightPositions.artCeiling}
+          color="#ffaa5e"
+          intensity={24}
+          distance={9.0}
+          decay={2}
+        />
       )}
     </>
   );

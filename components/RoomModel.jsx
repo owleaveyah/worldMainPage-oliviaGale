@@ -1,265 +1,164 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useEffect } from 'react';
+import { useGLTF } from '@react-three/drei';
+import * as THREE from 'three';
 
-export default function RoomModel({ activeView = 'OVERVIEW', isDarkMode, onSelectSection }) {
-  const [hoveredStation, setHoveredStation] = useState(null);
+// Map trimmed GLB mesh/group names to canonical portfolio station IDs
+const INTERACTIVE_TARGETS = {
+  // TECH
+  Tech_Monitor_Left_Screen: 'TECH',
+  Tech_Monitor_Left_Bezel: 'TECH',
+  Tech_Monitor_Right_Screen: 'TECH',
+  Tech_Monitor_Right_Bezel: 'TECH',
+  Tech_Desk_Frame: 'TECH',
+  Tech_Chair_Ergonomic: 'TECH',
+  Tech_Keyboard_Mech: 'TECH',
+  Tech_Mouse_Pad: 'TECH',
+  Tech_Mouse_Pad_Set: 'TECH',
+  Tech_PC_Tower_RTX3060: 'TECH',
+  Tech_PC_Tower_Motherboard: 'TECH',
+  Tech_PC_Tower_Glass: 'TECH',
+  Tech_PS5_Controller: 'TECH',
+  Tech_B5_Folio_Open: 'TECH',
+  Tech_Glass_IcedMatcha: 'TECH',
 
-  const handleHover = (station, over) => {
-    setHoveredStation(over ? station : null);
-    document.body.style.cursor = over ? 'pointer' : 'auto';
+  // ART
+  Art_Canvas_WIP: 'ART',
+  Art_Easel_AFrame: 'ART',
+  Art_RollingCart_3Tier: 'ART',
+  Art_Wooden_Stool: 'ART',
+  Art_Palette_Messy: 'ART',
+  Art_Mesh_Panel: 'ART',
+  'Art_Wooden_Bookshelf.001': 'ART',
+
+  // BRAND
+  Brand_Corkboard_Wall: 'BRAND',
+  Brand_Bed_Frame_Wood: 'BRAND',
+  Brand_Mattress_Duvet: 'BRAND',
+  Brand_Paper_Bed1: 'BRAND',
+  Brand_Paper_Bed2: 'BRAND',
+  Brand_Paper_Bed3: 'BRAND',
+  Brand_Pillows_Plush: 'BRAND',
+  Brand_SmallShelf_3Tier: 'BRAND',
+  Brand_Lamp_Bedside: 'BRAND',
+
+  // LOUNGE
+  Lounge_Table_Low: 'LOUNGE',
+  Lounge_iPad_Screen: 'LOUNGE',
+  Lounge_Ipad: 'LOUNGE',
+  'Lounge_Ipad.001': 'LOUNGE',
+  Lounge_Rug_Woven: 'LOUNGE',
+  Lounge_ScifiBook_1: 'LOUNGE',
+  Lounge_ScifiBook_2: 'LOUNGE',
+  Lounge_StickyNote: 'LOUNGE',
+  Lounge_Zine1: 'LOUNGE',
+  'Lounge_Zine1.001': 'LOUNGE',
+  Lounge_Zine2: 'LOUNGE',
+};
+
+export default function RoomModel({
+  onSelectSection,
+  onLightsLoaded,
+}) {
+  const { scene, nodes } = useGLTF('/models/room.glb');
+
+  // Configure shadows & extract LightPos_* Empty coordinates on load
+  useEffect(() => {
+    scene.traverse((child) => {
+      if (!child.isMesh) return;
+      const lowerName = child.name.trim().toLowerCase();
+
+      // Prevent window glass and exterior backdrop from blocking directional sunlight
+      if (lowerName.includes('glass')) {
+        child.castShadow = false;
+        child.receiveShadow = false;
+        if (child.material && !child.material.map) {
+          child.material = child.material.clone();
+          child.material.transparent = true;
+          child.material.opacity = 0.2;
+          child.material.roughness = 0.1;
+          child.material.depthWrite = false;
+        }
+      } else if (lowerName.includes('backdrop')) {
+        child.castShadow = false;
+        child.receiveShadow = false;
+      } else {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+
+    const nightstandEmpty =
+      nodes.LightPos_Nightstand || scene.getObjectByName('LightPos_Nightstand');
+    const artCeilingEmpty =
+      nodes.LightPos_ArtCeiling || scene.getObjectByName('LightPos_ArtCeiling');
+
+    const positions = { nightstand: null, artCeiling: null };
+
+    if (nightstandEmpty) {
+      const pos = new THREE.Vector3();
+      nightstandEmpty.updateWorldMatrix(true, false);
+      nightstandEmpty.getWorldPosition(pos);
+      positions.nightstand = [pos.x, pos.y, pos.z];
+    }
+
+    if (artCeilingEmpty) {
+      const pos = new THREE.Vector3();
+      artCeilingEmpty.updateWorldMatrix(true, false);
+      artCeilingEmpty.getWorldPosition(pos);
+      positions.artCeiling = [pos.x, pos.y, pos.z];
+    }
+
+    if (onLightsLoaded) {
+      onLightsLoaded(positions);
+    }
+
+    return () => {
+      document.body.style.cursor = 'auto';
+    };
+  }, [scene, nodes, onLightsLoaded]);
+
+  const resolveSection = (object) => {
+    let curr = object;
+    while (curr) {
+      const trimmedName = curr.name ? curr.name.trim() : '';
+      if (INTERACTIVE_TARGETS[trimmedName]) {
+        return INTERACTIVE_TARGETS[trimmedName];
+      }
+      curr = curr.parent;
+    }
+    return null;
   };
 
-  const handleSelect = (section) => {
-    if (onSelectSection) {
-      onSelectSection(section.toUpperCase());
+  const handlePointerOver = (e) => {
+    const section = resolveSection(e.object);
+    if (section) {
+      e.stopPropagation();
+      document.body.style.cursor = 'pointer';
     }
   };
 
-  const isStationActive = (st) => activeView === st || hoveredStation === st;
+  const handlePointerOut = () => {
+    document.body.style.cursor = 'auto';
+  };
+
+  const handleClick = (e) => {
+    const section = resolveSection(e.object);
+    if (section && onSelectSection) {
+      e.stopPropagation();
+      onSelectSection(section);
+    }
+  };
 
   return (
-    <group>
-      {/* Floor Slab (Light warm pine/birch) */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 0]} receiveShadow>
-        <planeGeometry args={[11, 11]} />
-        <meshStandardMaterial color={isDarkMode ? '#0e1117' : '#dfdad1'} roughness={0.6} />
-      </mesh>
-
-      {/* Back Wall (Gallery off-white) */}
-      <mesh position={[0, 2.75, -5.5]} receiveShadow>
-        <boxGeometry args={[11, 5.5, 0.2]} />
-        <meshStandardMaterial color={isDarkMode ? '#141822' : '#eeeae2'} />
-      </mesh>
-
-      {/* Left Wall */}
-      <group position={[-5.5, 2.75, 0]}>
-        <mesh position={[0, 0, 0]} receiveShadow>
-          <boxGeometry args={[0.2, 5.5, 11]} />
-          <meshStandardMaterial color={isDarkMode ? '#12151e' : '#eae5dc'} />
-        </mesh>
-        {/* Recessed Window Frame */}
-        <mesh position={[0.15, 0.6, -1.0]}>
-          <boxGeometry args={[0.08, 2.4, 3.2]} />
-          <meshStandardMaterial color={isDarkMode ? '#090d14' : '#ffffff'} />
-        </mesh>
-      </group>
-
-      {/* Back Wall Framed Art (Warm gallery prints) */}
-      <group position={[1.4, 3.2, -5.35]}>
-        <mesh position={[-0.8, 0, 0]}>
-          <boxGeometry args={[1.2, 1.4, 0.05]} />
-          <meshStandardMaterial color={isDarkMode ? '#1c222e' : '#d9d2c5'} />
-        </mesh>
-        <mesh position={[0.7, 0, 0]}>
-          <boxGeometry args={[1.2, 1.4, 0.05]} />
-          <meshStandardMaterial color={isDarkMode ? '#1c222e' : '#d9d2c5'} />
-        </mesh>
-      </group>
-
-      {/* ========================================================
-          1. TECH STATION: Workstation Desk, Inward-Facing Screens, Chair
-          ======================================================== */}
-      <group position={[-3.4, 0, -0.4]}>
-        {/* Floor Target Glow Ring when Active */}
-        {isStationActive('TECH') && (
-          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}>
-            <ringGeometry args={[1.6, 1.75, 32]} />
-            <meshBasicMaterial color="#00e5ff" transparent opacity={0.6} />
-          </mesh>
-        )}
-
-        {/* Desk Table */}
-        <mesh position={[0, 0.72, 0]} castShadow receiveShadow>
-          <boxGeometry args={[1.6, 0.08, 3.2]} />
-          <meshStandardMaterial
-            color={isStationActive('TECH') ? (isDarkMode ? '#2d3748' : '#a89078') : isDarkMode ? '#1a1a1a' : '#8b7355'}
-          />
-        </mesh>
-        {/* Desk Legs */}
-        <mesh position={[-0.65, 0.36, -1.4]} castShadow>
-          <boxGeometry args={[0.08, 0.72, 0.08]} />
-          <meshStandardMaterial color="#222" />
-        </mesh>
-        <mesh position={[0.65, 0.36, -1.4]} castShadow>
-          <boxGeometry args={[0.08, 0.72, 0.08]} />
-          <meshStandardMaterial color="#222" />
-        </mesh>
-        <mesh position={[-0.65, 0.36, 1.4]} castShadow>
-          <boxGeometry args={[0.08, 0.72, 0.08]} />
-          <meshStandardMaterial color="#222" />
-        </mesh>
-        <mesh position={[0.65, 0.36, 1.4]} castShadow>
-          <boxGeometry args={[0.08, 0.72, 0.08]} />
-          <meshStandardMaterial color="#222" />
-        </mesh>
-
-        {/* Dual Monitors: Angled 30° inward toward the room */}
-        <mesh
-          position={[0.15, 1.25, 0.2]}
-          rotation={[0, Math.PI / 6, 0]}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleSelect('TECH');
-          }}
-          onPointerOver={() => handleHover('TECH', true)}
-          onPointerOut={() => handleHover('TECH', false)}
-        >
-          <boxGeometry args={[0.08, 0.75, 2.0]} />
-          <meshStandardMaterial
-            color={isDarkMode ? '#080c14' : '#1f2937'}
-            emissive={isDarkMode ? '#00e5ff' : isStationActive('TECH') ? '#00e5ff' : '#111827'}
-            emissiveIntensity={isStationActive('TECH') ? 3.5 : isDarkMode ? 2.8 : 0.15}
-          />
-        </mesh>
-
-        {/* Ergonomic Office Chair */}
-        <group position={[0.8, 0, 0]}>
-          <mesh position={[0, 0.45, 0]} castShadow>
-            <boxGeometry args={[0.55, 0.08, 0.55]} />
-            <meshStandardMaterial color="#222" />
-          </mesh>
-          <mesh position={[0.25, 0.8, 0]} castShadow>
-            <boxGeometry args={[0.08, 0.65, 0.5]} />
-            <meshStandardMaterial color="#222" />
-          </mesh>
-        </group>
-      </group>
-
-      {/* ========================================================
-          2. FINE ART STATION: Studio Easel, Canvas, Stool
-          ======================================================== */}
-      <group position={[-0.6, 0, -3.8]}>
-        {/* Floor Target Glow Ring when Active */}
-        {isStationActive('ART') && (
-          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0.2]}>
-            <ringGeometry args={[1.3, 1.45, 32]} />
-            <meshBasicMaterial color="#ef4444" transparent opacity={0.6} />
-          </mesh>
-        )}
-
-        {/* Canvas (Clickable) */}
-        <mesh
-          position={[0, 1.65, 0.1]}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleSelect('ART');
-          }}
-          onPointerOver={() => handleHover('ART', true)}
-          onPointerOut={() => handleHover('ART', false)}
-          castShadow
-        >
-          <boxGeometry args={[1.5, 1.9, 0.08]} />
-          <meshStandardMaterial
-            color={isStationActive('ART') ? '#dc2626' : '#b91c1c'}
-            roughness={0.4}
-            emissive={isStationActive('ART') ? '#ef4444' : '#000000'}
-            emissiveIntensity={isStationActive('ART') ? 0.4 : 0}
-          />
-        </mesh>
-        {/* Easel Tripod */}
-        <mesh position={[0, 1.1, -0.05]} castShadow>
-          <boxGeometry args={[1.6, 2.2, 0.25]} />
-          <meshStandardMaterial color={isDarkMode ? '#1f1813' : '#634735'} />
-        </mesh>
-        {/* Painter's Stool */}
-        <mesh position={[0.1, 0.3, 0.9]} castShadow>
-          <cylinderGeometry args={[0.3, 0.35, 0.6, 16]} />
-          <meshStandardMaterial color={isDarkMode ? '#222' : '#3e3228'} />
-        </mesh>
-      </group>
-
-      {/* ========================================================
-          3. STRATEGY / BRAND STATION: Daybed, Table, Lamp
-          ======================================================== */}
-      <group position={[2.9, 0, -1.8]}>
-        {/* Floor Target Glow Ring when Active */}
-        {isStationActive('BRAND') && (
-          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}>
-            <ringGeometry args={[1.9, 2.05, 32]} />
-            <meshBasicMaterial color="#a855f7" transparent opacity={0.6} />
-          </mesh>
-        )}
-
-        {/* Daybed Mattress */}
-        <mesh position={[0, 0.45, 0]} castShadow receiveShadow>
-          <boxGeometry args={[2.5, 0.65, 4.2]} />
-          <meshStandardMaterial color={isDarkMode ? '#191d26' : '#f1f0eb'} />
-        </mesh>
-        {/* Brand Proofs & Zines on Bed (Clickable) */}
-        <mesh
-          position={[0, 0.8, 0.3]}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleSelect('BRAND');
-          }}
-          onPointerOver={() => handleHover('BRAND', true)}
-          onPointerOut={() => handleHover('BRAND', false)}
-        >
-          <boxGeometry args={[1.8, 0.04, 2.2]} />
-          <meshStandardMaterial
-            color={isStationActive('BRAND') ? '#9333ea' : '#7c3aed'}
-            emissive={isStationActive('BRAND') ? '#a855f7' : '#000000'}
-            emissiveIntensity={isStationActive('BRAND') ? 0.5 : 0}
-          />
-        </mesh>
-        {/* Nightstand & Lamp */}
-        <group position={[0.2, 0, -2.6]}>
-          <mesh position={[0, 0.4, 0]} castShadow>
-            <boxGeometry args={[1.0, 0.8, 0.9]} />
-            <meshStandardMaterial color={isDarkMode ? '#222' : '#785f4b'} />
-          </mesh>
-          <mesh position={[0, 0.95, 0]}>
-            <cylinderGeometry args={[0.2, 0.3, 0.35, 16]} />
-            <meshStandardMaterial
-              color={isDarkMode ? '#fff' : '#eee'}
-              emissive={isDarkMode || isStationActive('BRAND') ? '#ffaa55' : '#000'}
-              emissiveIntensity={isStationActive('BRAND') ? 3.5 : isDarkMode ? 3.0 : 0}
-            />
-          </mesh>
-        </group>
-      </group>
-
-      {/* ========================================================
-          4. CULTURE LOUNGE: Soft Woven Rug & Slim Low Coffee Table
-          ======================================================== */}
-      <group position={[0, 0, 1.2]}>
-        {/* Floor Target Glow Ring when Active */}
-        {isStationActive('LOUNGE') && (
-          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
-            <ringGeometry args={[1.4, 1.55, 32]} />
-            <meshBasicMaterial color="#10b981" transparent opacity={0.6} />
-          </mesh>
-        )}
-
-        {/* Round Rug (Warm neutral tone) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} receiveShadow>
-          <circleGeometry args={[2.0, 32]} />
-          <meshStandardMaterial
-            color={isStationActive('LOUNGE') ? (isDarkMode ? '#263339' : '#b8c9c0') : isDarkMode ? '#1a202c' : '#d4ccc0'}
-            roughness={0.8}
-          />
-        </mesh>
-        {/* Slim Low Coffee Table (Birch/Natural tone) */}
-        <mesh
-          position={[0, 0.22, 0]}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleSelect('LOUNGE');
-          }}
-          onPointerOver={() => handleHover('LOUNGE', true)}
-          onPointerOut={() => handleHover('LOUNGE', false)}
-          castShadow
-        >
-          <cylinderGeometry args={[1.0, 1.0, 0.16, 32]} />
-          <meshStandardMaterial
-            color={isStationActive('LOUNGE') ? '#e2e8f0' : isDarkMode ? '#2d3748' : '#f8fafc'}
-            roughness={0.3}
-            emissive={isStationActive('LOUNGE') ? '#10b981' : '#000000'}
-            emissiveIntensity={isStationActive('LOUNGE') ? 0.3 : 0}
-          />
-        </mesh>
-      </group>
-    </group>
+    <primitive
+      object={scene}
+      onPointerOver={handlePointerOver}
+      onPointerOut={handlePointerOut}
+      onClick={handleClick}
+    />
   );
 }
+
+useGLTF.preload('/models/room.glb');
