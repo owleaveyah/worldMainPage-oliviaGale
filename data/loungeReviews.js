@@ -82,13 +82,73 @@ export const loungeReviews = [
     },
     quote: 'True mystery lingers when a world refuses to translate itself completely into human logic.',
   },
+  {
+    id: 'the-creative-act',
+    channelCode: 'CH-05',
+    category: 'BOOKS',
+    title: 'The Creative Act: A Way of Being',
+    creator: 'Rick Rubin',
+    year: '2023',
+    coverImage: null,
+    hook: 'Treating perception, daily noticing, and playful experimentation as the real engine behind finished work.',
+    tags: ['CreativeProcess', 'ArtPractice', 'Mindfulness'],
+    breakdown: {
+      visualDirection:
+        'Strips art-making down to pure quiet attention—noticing light falloff on concrete, tonal shifts at dusk, and raw organic texture.',
+      narrativeDesign:
+        'Frames creativity as tuning an antenna rather than forcing outcomes—echoing my Document, Don’t Create and Minimum Viable Day mindsets.',
+      creativeTakeaway:
+        'Directly anchors how I move between oil/acrylic canvas sessions, shader sketches, and studio journaling without burning out on perfectionism.',
+    },
+    quote: 'To be an artist is to remain tuned to the quiet details everyone else walks past.',
+  },
+  {
+    id: 'sunrise-on-the-reaping',
+    channelCode: 'CH-06',
+    category: 'BOOKS',
+    title: 'Sunrise on the Reaping',
+    creator: 'Suzanne Collins',
+    year: '2025',
+    coverImage: null,
+    hook: 'Deconstructing how propaganda edits truth in real time—through Haymitch Abernathy’s brutal Second Quarter Quell.',
+    tags: ['Dystopia', 'Propaganda', 'Worldbuilding'],
+    breakdown: {
+      visualDirection:
+        'Juxtaposes intoxicating, flower-drenched arena paradise against lethal illusions and staged Capitol camera framing.',
+      narrativeDesign:
+        'Exposes the machinery behind spectacle: how footage is cut, reframed, and weaponized to rewrite rebellion before anyone even leaves the arena.',
+      creativeTakeaway:
+        'Deepens my critical eye for editorial framing, visual persuasion, and subtext in brand storytelling and narrative 3D environments.',
+    },
+    quote: 'When a lens controls what survives the cut, image-making becomes a battlefield.',
+  },
+  {
+    id: 'the-bell-jar',
+    channelCode: 'CH-07',
+    category: 'BOOKS',
+    title: 'The Bell Jar',
+    creator: 'Sylvia Plath',
+    year: '1963',
+    coverImage: null,
+    hook: 'Razor-sharp psychological interiority turning alienation, ambition, and sensory disorientation into unforgettable prose.',
+    tags: ['LiteraryFiction', 'Interiority', 'Psychological'],
+    breakdown: {
+      visualDirection:
+        'Paints mid-century New York glamour and clinical stillness in stark, high-contrast vignettes—mirrors, ink stains, and summer heat.',
+      narrativeDesign:
+        'Captures Esther Greenwood’s unraveling through hyper-observant sensory detail, dry wit, and the suffocating glass dome metaphor.',
+      creativeTakeaway:
+        'Validates making art that honors uneasy honesty, psychological depth, and quiet stillness alongside bright surface craft.',
+    },
+    quote: 'The glass dome blurs the world outside, yet sharpens every hairline crack within.',
+  },
 
   // ========================
   // GAMES
   // ========================
   {
     id: 'stray',
-    channelCode: 'CH-05',
+    channelCode: 'CH-08',
     category: 'GAMES',
     title: 'Stray',
     creator: 'BlueTwelve Studio',
@@ -108,7 +168,7 @@ export const loungeReviews = [
   },
   {
     id: 'death-stranding',
-    channelCode: 'CH-06',
+    channelCode: 'CH-09',
     category: 'GAMES',
     title: 'Death Stranding',
     creator: 'Kojima Productions',
@@ -126,13 +186,53 @@ export const loungeReviews = [
     },
     quote: 'Friction isn’t an obstacle to immersion; it’s what makes arrival feel earned.',
   },
+  {
+    id: 'resident-evil-requiem',
+    channelCode: 'CH-10',
+    category: 'GAMES',
+    title: 'Resident Evil Franchise — Resident Evil Requiem',
+    creator: 'Capcom (Dir. Koshi Nakanishi)',
+    year: '1996–2026',
+    coverImage: null,
+    hook: 'Weaponizing oppressive architectural shadow, claustrophobic soundscapes, and scarce resources into pure survival tension.',
+    tags: ['SurvivalHorror', 'AtmosphericLighting', 'LevelDesign'],
+    breakdown: {
+      visualDirection:
+        'Carves dramatic sightlines out of near-darkness—balancing cold emergency strips, flashlight cones, and damp ruined concrete so every illuminated detail demands attention.',
+      narrativeDesign:
+        'Builds dread through interconnected spatial puzzles and tight inventory risk-reward, carrying decades of Raccoon City mythos forward into Requiem’s psychological survival.',
+      creativeTakeaway:
+        'Sharpened how I stage directional key lighting, wet surface roughness, and restrained diegetic storytelling inside real-time 3D scenes and IMARA.',
+    },
+    quote: 'True tension is sculpted in what a flashlight refuses to show.',
+  },
+  {
+    id: 'repo-game',
+    channelCode: 'CH-11',
+    category: 'GAMES',
+    title: 'R.E.P.O.',
+    creator: 'semiwork',
+    year: '2025',
+    coverImage: null,
+    hook: 'Turning physics-based ragdoll handling and proximity voice into chaotic co-op horror.',
+    tags: ['CoopHorror', 'PhysicsDesign', 'EmergentPlay'],
+    breakdown: {
+      visualDirection:
+        'Contrasts goofy, expressive cylindrical bot silhouettes and bouncy UI feedback against brooding Gothic corridors and eerie industrial shadows.',
+      narrativeDesign:
+        'Generates unscripted comedy and panic purely out of mechanics—every fragile antique carried through dark hallways becomes an improvised team heist.',
+      creativeTakeaway:
+        'A reminder that tactile physics constraints and expressive character readability make even simple 3D spaces unforgettable to explore together.',
+    },
+    quote: 'When mechanics have real weight and fragility, players write the horror—and the comedy—themselves.',
+  },
 
   // ========================
   // FILMS
   // ========================
   {
     id: 'moebius-visual-worlds',
-    channelCode: 'CH-07',
+    channelCode: 'CH-12',
     category: 'FILMS',
     title: 'The Architecture of Surreal Sci-Fi',
     creator: 'Jean "Moebius" Giraud & Sci-Fi Cinema',
@@ -156,7 +256,7 @@ export const loungeReviews = [
   // ========================
   {
     id: 'atua-midtown-case',
-    channelCode: 'CH-08',
+    channelCode: 'CH-13',
     category: 'CAMPAIGNS',
     title: 'Atua Midtown: Adaptive Brand Placemaking',
     creator: 'Cebu UNESCO City of Design',
@@ -173,5 +273,161 @@ export const loungeReviews = [
         'Reinforces my belief that strong branding solves real operational problems while honoring cultural roots.',
     },
     quote: 'The best creative hubs don’t manufacture culture—they build a roof for it to thrive.',
+  },
+
+  // ========================
+  // MUSIC (SEGREGATED BY GENRE)
+  // ========================
+  {
+    id: 'music-creator-kpop-altpop',
+    channelCode: 'CH-14',
+    category: 'MUSIC',
+    genre: 'Creator Crew K-Pop & Alt-Pop',
+    title: 'CORTIS — Self-Producing Creator Crew Inspo',
+    creator: 'CORTIS ★ (Studio Inspo)',
+    year: 'Heavy Rotation',
+    coverImage: null,
+    artists: [{ name: 'CORTIS', inspo: true }],
+    hook: 'BIGHIT’s creator crew fusing K-Pop precision with 60s psych-rock guitars, raw hip-hop percussion, and hands-on art direction.',
+    tags: ['PrimaryInspo', 'CreatorCrew', 'GenreBending'],
+    breakdown: {
+      visualDirection:
+        'Pairs tight editorial styling and kinetic visual worldbuilding with unfiltered DIY studio process—mirroring how I document builds and WIPs openly.',
+      narrativeDesign:
+        'Treats every track like an interdisciplinary playground where pop hooks collide with rugged guitars, boom-bap grit, and experimental jazz textures.',
+      creativeTakeaway:
+        'Massive inspiration for how I bridge programmer-like rigor, tactile craft, and playful personal identity across 3D rooms and brand work.',
+    },
+    quote: 'Build the crew, touch every layer of the craft, and refuse to stay boxed inside one genre.',
+  },
+  {
+    id: 'music-dream-pop-shoegaze',
+    channelCode: 'CH-15',
+    category: 'MUSIC',
+    genre: 'Dream Pop & Shoegaze',
+    title: 'Ethereal Haze & Velvet Reverb',
+    creator: 'Cocteau Twins • Mazzy Star • The Marías',
+    year: 'Late-Night Mix',
+    coverImage: null,
+    artists: [
+      { name: 'Cocteau Twins' },
+      { name: 'Mazzy Star' },
+      { name: 'The Marías' },
+    ],
+    hook: 'Shimmering walls of chorus guitar, unhurried slowcore drift, and bilingual velvet atmosphere for deep nocturnal focus.',
+    tags: ['DreamPop', 'Shoegaze', 'Atmosphere'],
+    breakdown: {
+      visualDirection:
+        'Feels like soft bloom, warm film grain, and moonlight refracting through rain on glass—direct fuel for my scene lighting and color grading.',
+      narrativeDesign:
+        'Communicates emotion purely through texture, timbre, and vocal suspension rather than rushing into neat literal statements.',
+      creativeTakeaway:
+        'Directly shapes the hazy warmth of my night-mode renders, underwater IMARA shader tests, and oil/acrylic edge softening.',
+    },
+    quote: 'Atmosphere says everything long before a single lyric resolves.',
+  },
+  {
+    id: 'music-post-punk-indie-rock',
+    channelCode: 'CH-16',
+    category: 'MUSIC',
+    genre: 'Post-Punk & Indie Rock',
+    title: 'Goth Melancholy & Literary Jangle',
+    creator: 'The Cure • The Smiths • Morrissey',
+    year: 'Classic Vinyl',
+    coverImage: null,
+    artists: [
+      { name: 'The Cure' },
+      { name: 'The Smiths' },
+      { name: 'Morrissey' },
+    ],
+    hook: 'Crystalline chorus-laced guitars and romantic gothic gloom balanced with razor-sharp poetic wit.',
+    tags: ['PostPunk', 'IndieRock', 'JanglePop'],
+    breakdown: {
+      visualDirection:
+        'Evokes overcast coastal evenings, moody charcoal shadows, and sudden flashes of electric turquoise and rose neon.',
+      narrativeDesign:
+        'Turns hyper-specific everyday longing and theatrical melancholy into unforgettable melodies you can work to for hours.',
+      creativeTakeaway:
+        'Reminds me to keep dramatic contrast and unmistakable personal voice alive even inside polished portfolio systems.',
+    },
+    quote: 'Melancholy hits hardest when paired with bright, crystalline guitar lines.',
+  },
+  {
+    id: 'music-alt-rnb-bedroom-pop',
+    channelCode: 'CH-17',
+    category: 'MUSIC',
+    genre: 'Alt-R&B, Neo-Soul & Bedroom Pop',
+    title: 'Warm Grooves & Lo-Fi Intimacy',
+    creator: 'SZA • Daniel Caesar • Steve Lacy • Malcolm Todd • beabadoobee',
+    year: 'Studio Staple',
+    coverImage: null,
+    artists: [
+      { name: 'SZA' },
+      { name: 'Daniel Caesar' },
+      { name: 'Steve Lacy' },
+      { name: 'Malcolm Todd' },
+      { name: 'beabadoobee' },
+    ],
+    hook: 'Sun-bleached DIY basslines, gospel-warm neo-soul harmonies, and candid bedroom confessions built on tactile intimacy.',
+    tags: ['AltRnB', 'NeoSoul', 'BedroomPop'],
+    breakdown: {
+      visualDirection:
+        'Feels like afternoon window sunbeams over iced matcha—lived-in textures, warm analog saturation, and unforced charm.',
+      narrativeDesign:
+        'Proves how lo-fi tools and vulnerable, conversational songwriting build an instant bond without sterile overproduction.',
+      creativeTakeaway:
+        'Matches the cozy, lived-in storytelling inside this very isometric bedroom and my Minimum Viable Day creative rhythm.',
+    },
+    quote: 'Warmth comes from leaving honest human fingerprints in the mix.',
+  },
+  {
+    id: 'music-alt-hiphop-virtual',
+    channelCode: 'CH-18',
+    category: 'MUSIC',
+    genre: 'Alt Hip-Hop & Virtual Art Pop',
+    title: 'High-Concept Worlds & Sonic Collages',
+    creator: 'Gorillaz • Tyler, The Creator',
+    year: 'Concept Eras',
+    coverImage: null,
+    artists: [
+      { name: 'Gorillaz' },
+      { name: 'Tyler, The Creator' },
+    ],
+    hook: 'World-first creative direction where animated lore, bold color-era reinvention, and eclectic production collide.',
+    tags: ['VirtualBand', 'ArtDirection', 'AltHipHop'],
+    breakdown: {
+      visualDirection:
+        'Every album builds an unmistakable visual universe—distinct palettes, typography, costume silhouettes, and character lore.',
+      narrativeDesign:
+        'Uses alter egos and virtual worldbuilding to mash hip-hop, funk, dub, punk, and synth-pop without asking permission.',
+      creativeTakeaway:
+        'Sets the gold standard for cohesive multimedia branding where illustration, 3D/motion, and sound belong to one world.',
+    },
+    quote: 'Every project deserves its own color palette, silhouette, and mythology.',
+  },
+  {
+    id: 'music-opm-alt-funk',
+    channelCode: 'CH-19',
+    category: 'MUSIC',
+    genre: 'OPM Alt-Rock & Pinoy Funk-Disco',
+    title: 'Local Roots, Retro Swagger & Alt Grit',
+    creator: 'IV of Spades • Kitchie Nadal',
+    year: 'OPM Essentials',
+    coverImage: null,
+    artists: [
+      { name: 'IV of Spades' },
+      { name: 'Kitchie Nadal' },
+    ],
+    hook: 'From 70s-inflected Manila disco-funk basslines to iconic mid-2000s acoustic alt-rock catharsis.',
+    tags: ['OPM', 'PinoyFunk', 'AltRock'],
+    breakdown: {
+      visualDirection:
+        'Blends bold retro theatrical styling and unmistakable Filipino warmth with raw live-band authenticity.',
+      narrativeDesign:
+        'Captures both effortless groove and unvarnished heartache—music rooted deeply in local youth culture and memory.',
+      creativeTakeaway:
+        'Keeps my creative voice grounded in Philippine texture and spirit—whether in Cebu/Iloilo brand work or IMARA.',
+    },
+    quote: 'Nothing resonates like local groove and honest acoustic grit.',
   },
 ];

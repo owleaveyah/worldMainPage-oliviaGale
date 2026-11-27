@@ -16,12 +16,34 @@ import {
   Tv,
   User,
   Image as ImageIcon,
+  Layers,
 } from 'lucide-react';
 import clsx from 'clsx';
 import { withBasePath } from '@/lib/assetPath';
 import { loungeReviews } from '@/data/loungeReviews';
+import { loungeAesthetics } from '@/data/loungeAesthetics';
+import { loungeArtReferences } from '@/data/loungeArt';
 
-const CATEGORIES = ['ALL', 'BOOKS', 'GAMES', 'FILMS', 'CAMPAIGNS'];
+const TAB_HEADERS = {
+  screening: {
+    eyebrow: "LIVIE'S CULTURE LOUNGE",
+    title: 'Notes on Craft, Story & Worldbuilding',
+  },
+  aesthetics: {
+    eyebrow: 'VISUAL & ERA ARCHIVE',
+    title: 'Aesthetics Library — Collected Movements & Palettes',
+  },
+  art: {
+    eyebrow: 'FINE ART & ILLUSTRATION INSPO',
+    title: 'Art Library — Creators, Sketchbooks & Linework',
+  },
+  profile: {
+    eyebrow: 'PERSONAL STUDIO PROFILE',
+    title: 'Iloilo-Based Creative & Studio Lore',
+  },
+};
+
+const CATEGORIES = ['ALL', 'BOOKS', 'GAMES', 'FILMS', 'CAMPAIGNS', 'MUSIC'];
 
 // Derived from Olivia Gale's personal brand gradient:
 // Rose-Coral (#D66370), Warm Sand (#C7AF6E), Matcha-Mint (#AEE8A2), Seafoam Teal (#42AEA3)
@@ -30,6 +52,7 @@ const BADGE_STYLES = {
   GAMES: 'bg-[#42AEA3]/20 text-[#86EFE4] border-[#42AEA3]/45',
   FILMS: 'bg-[#D66370]/20 text-[#FFA3AD] border-[#D66370]/45',
   CAMPAIGNS: 'bg-[#AEE8A2]/18 text-[#C7F7BA] border-[#AEE8A2]/40',
+  MUSIC: 'bg-[#B497FF]/20 text-[#D8CAFF] border-[#B497FF]/45',
 };
 
 const CHANNEL_ACCENTS = {
@@ -37,6 +60,7 @@ const CHANNEL_ACCENTS = {
   GAMES: '#42AEA3',
   FILMS: '#D66370',
   CAMPAIGNS: '#AEE8A2',
+  MUSIC: '#B497FF',
 };
 
 const BRAND_GRADIENT =
@@ -46,6 +70,7 @@ const LORE_PILLS = [
   'Sci-Fi Reading List',
   'PS5 Gaming',
   'Crochet WIPs',
+  'Journaling',
   'Iced Matcha',
   'Hojicha',
   'My Shih Tzus',
@@ -126,6 +151,93 @@ function ScreeningMonitorFrame({ item, compact = false }) {
   );
 }
 
+function AestheticSpecimenBanner({ item }) {
+  return (
+    <div className="relative w-full aspect-[16/8] overflow-hidden rounded-xl border border-white/15 bg-[#0B0E12] shadow-inner">
+      {item.specimenType === 'neo-retro' && (
+        <div
+          className="w-full h-full relative flex flex-col justify-between p-3.5"
+          style={{
+            background:
+              'radial-gradient(circle at 75% 25%, rgba(255,107,74,0.38), transparent 52%), radial-gradient(circle at 22% 80%, rgba(44,198,184,0.32), transparent 55%), linear-gradient(155deg, #1b1f2b 0%, #10141d 100%)',
+          }}
+        >
+          {/* Retro scanline overlay */}
+          <div
+            className="absolute inset-0 opacity-20 pointer-events-none"
+            style={{
+              backgroundImage:
+                'repeating-linear-gradient(to bottom, rgba(255,255,255,0.22) 0px, rgba(255,255,255,0.22) 1px, transparent 1px, transparent 4px)',
+            }}
+          />
+          <div className="relative flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FF6B4A]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#F4C95D]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#2CC6B8]" />
+            </div>
+            <span className="font-mono text-[10px] tracking-widest text-[#F4C95D]/90">
+              SYS // CRT-1999
+            </span>
+          </div>
+          <div className="relative flex items-end justify-between">
+            <div className="px-2.5 py-1 rounded border border-[#F4C95D]/40 bg-black/45 font-mono text-[11px] font-bold tracking-wider text-[#F4C95D]">
+              NEO-RETRO.EXE
+            </div>
+            <div className="w-12 h-12 rounded-xl border border-white/25 bg-gradient-to-br from-white/20 to-transparent backdrop-blur-sm shadow-[0_0_20px_rgba(255,107,74,0.35)]" />
+          </div>
+        </div>
+      )}
+
+      {item.specimenType === 'frutiger-aero' && (
+        <div
+          className="w-full h-full relative flex flex-col justify-between p-3.5"
+          style={{
+            background:
+              'radial-gradient(circle at 25% 22%, rgba(255,255,255,0.55), transparent 42%), radial-gradient(circle at 80% 78%, rgba(163,230,53,0.45), transparent 52%), linear-gradient(145deg, #0ea5e9 0%, #2dd4bf 55%, #84cc16 100%)',
+          }}
+        >
+          {/* Glossy specular dome */}
+          <div className="absolute -top-10 -left-8 w-44 h-28 rounded-full bg-white/30 blur-[1px] pointer-events-none" />
+          {/* Floating aqua orbs */}
+          <div className="absolute right-8 top-5 w-16 h-16 rounded-full border border-white/60 bg-gradient-to-br from-white/55 via-cyan-200/20 to-transparent shadow-[0_8px_24px_rgba(14,165,233,0.35)]" />
+          <div className="absolute right-20 bottom-6 w-8 h-8 rounded-full border border-white/65 bg-white/25" />
+          <div className="relative flex items-center justify-between">
+            <span className="px-2.5 py-0.5 rounded-full bg-white/35 backdrop-blur-md border border-white/50 font-mono text-[10px] font-bold text-[#083344]">
+              AERO // AQUA GLASS
+            </span>
+          </div>
+          <div className="relative">
+            <div className="inline-block px-3 py-1 rounded-full bg-gradient-to-b from-white/75 to-white/30 border border-white/70 shadow-md font-sans text-xs font-bold text-[#082f49]">
+              Eco-Futurism
+            </div>
+          </div>
+        </div>
+      )}
+
+      {item.specimenType === 'abstract-corporate' && (
+        <div className="w-full h-full relative flex flex-col justify-between p-3.5 bg-[#EAE6DF]">
+          {/* Modernist geometric blocks */}
+          <div className="absolute -right-4 -top-4 w-28 h-28 rounded-full bg-[#2563EB]" />
+          <div className="absolute right-12 bottom-0 w-24 h-20 rounded-tl-full bg-[#D66370]" />
+          <div className="absolute left-6 bottom-4 w-12 h-12 rounded-full bg-[#EAB308]" />
+          <div className="absolute left-20 top-7 w-16 h-2 rounded-full bg-[#111827]" />
+          <div className="relative flex items-center justify-between">
+            <span className="px-2 py-0.5 rounded bg-[#111827] font-mono text-[10px] font-bold tracking-wider text-[#EAE6DF]">
+              GRID // 03
+            </span>
+          </div>
+          <div className="relative flex justify-end">
+            <span className="px-2.5 py-0.5 rounded bg-white/90 border border-[#111827]/20 font-display text-[11px] font-bold tracking-tight text-[#111827]">
+              Modernist Vector
+            </span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function LoungeDashboardModal({
   onClose,
   onOpenFineArt,
@@ -133,6 +245,7 @@ export default function LoungeDashboardModal({
 }) {
   const [activeTab, setActiveTab] = useState('screening');
   const [activeCategory, setActiveCategory] = useState('ALL');
+  const [activeMusicGenre, setActiveMusicGenre] = useState('ALL GENRES');
   const [selectedReview, setSelectedReview] = useState(() =>
     initialReviewId ? loungeReviews.find((r) => r.id === initialReviewId) || null : null
   );
@@ -156,10 +269,25 @@ export default function LoungeDashboardModal({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
-  const filteredReviews =
-    activeCategory === 'ALL'
-      ? loungeReviews
-      : loungeReviews.filter((item) => item.category === activeCategory);
+  const musicGenres = [
+    'ALL GENRES',
+    ...Array.from(
+      new Set(
+        loungeReviews
+          .filter((item) => item.category === 'MUSIC' && item.genre)
+          .map((item) => item.genre)
+      )
+    ),
+  ];
+
+  const filteredReviews = loungeReviews.filter((item) => {
+    if (activeCategory === 'ALL') return true;
+    if (item.category !== activeCategory) return false;
+    if (activeCategory === 'MUSIC' && activeMusicGenre !== 'ALL GENRES') {
+      return item.genre === activeMusicGenre;
+    }
+    return true;
+  });
 
   const handleCopyEmail = () => {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -209,25 +337,21 @@ export default function LoungeDashboardModal({
           <div className="flex flex-wrap items-center justify-between gap-3 px-6 pb-4 pt-1.5">
             <div>
               <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#66D1C6] font-semibold">
-                {activeTab === 'screening'
-                  ? "LIVIE'S CULTURE LOUNGE"
-                  : 'PERSONAL STUDIO PROFILE'}
+                {TAB_HEADERS[activeTab]?.eyebrow}
               </p>
               <h2 className="font-display text-xl md:text-2xl font-bold tracking-tight text-white mt-0.5">
-                {activeTab === 'screening'
-                  ? 'Notes on Craft, Story & Worldbuilding'
-                  : 'Iloilo-Based Creative & Studio Lore'}
+                {TAB_HEADERS[activeTab]?.title}
               </h2>
             </div>
 
             <div className="flex items-center gap-2.5">
               {/* Segmented Pill Switcher */}
-              <div className="inline-flex p-1 rounded-xl bg-[#090C10] border border-white/10 shadow-inner">
+              <div className="inline-flex flex-wrap p-1 rounded-xl bg-[#090C10] border border-white/10 shadow-inner">
                 <button
                   type="button"
                   onClick={() => setActiveTab('screening')}
                   className={clsx(
-                    'inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg font-mono text-[11px] font-semibold transition-all cursor-pointer',
+                    'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-mono text-[11px] font-semibold transition-all cursor-pointer',
                     activeTab === 'screening'
                       ? 'bg-[#42AEA3]/25 text-[#8CF0E6] border border-[#42AEA3]/45 shadow-[0_2px_10px_rgba(66,174,163,0.22)]'
                       : 'text-neutral-400 hover:text-neutral-200 border border-transparent'
@@ -238,9 +362,35 @@ export default function LoungeDashboardModal({
                 </button>
                 <button
                   type="button"
+                  onClick={() => setActiveTab('aesthetics')}
+                  className={clsx(
+                    'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-mono text-[11px] font-semibold transition-all cursor-pointer',
+                    activeTab === 'aesthetics'
+                      ? 'bg-[#C7AF6E]/25 text-[#F6E5AF] border border-[#C7AF6E]/45 shadow-[0_2px_10px_rgba(199,175,110,0.22)]'
+                      : 'text-neutral-400 hover:text-neutral-200 border border-transparent'
+                  )}
+                >
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>Aesthetics Library</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('art')}
+                  className={clsx(
+                    'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-mono text-[11px] font-semibold transition-all cursor-pointer',
+                    activeTab === 'art'
+                      ? 'bg-[#AEE8A2]/22 text-[#D5FAD0] border border-[#AEE8A2]/45 shadow-[0_2px_10px_rgba(174,232,162,0.22)]'
+                      : 'text-neutral-400 hover:text-neutral-200 border border-transparent'
+                  )}
+                >
+                  <Palette className="w-3.5 h-3.5" />
+                  <span>Art</span>
+                </button>
+                <button
+                  type="button"
                   onClick={() => setActiveTab('profile')}
                   className={clsx(
-                    'inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg font-mono text-[11px] font-semibold transition-all cursor-pointer',
+                    'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-mono text-[11px] font-semibold transition-all cursor-pointer',
                     activeTab === 'profile'
                       ? 'bg-[#D66370]/25 text-[#FFB0B9] border border-[#D66370]/45 shadow-[0_2px_10px_rgba(214,99,112,0.22)]'
                       : 'text-neutral-400 hover:text-neutral-200 border border-transparent'
@@ -266,30 +416,65 @@ export default function LoungeDashboardModal({
 
         {/* Category Filter Shelf (Visible in Screening Room shelf view) */}
         {activeTab === 'screening' && !selectedReview && (
-          <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-3 bg-[#0E1318]/80 border-b border-white/10 shrink-0">
-            <div className="flex flex-wrap gap-2">
-              {CATEGORIES.map((cat) => {
-                const isActive = activeCategory === cat;
-                return (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => setActiveCategory(cat)}
-                    className={clsx(
-                      'px-3.5 py-1 rounded-lg font-mono text-xs font-semibold tracking-wider border transition-all cursor-pointer',
-                      isActive
-                        ? 'bg-[#42AEA3]/20 text-[#8CF0E6] border-[#42AEA3]/50 shadow-[0_2px_12px_rgba(66,174,163,0.18)]'
-                        : 'bg-white/[0.03] text-neutral-400 border-white/10 hover:text-neutral-100 hover:border-white/25'
-                    )}
-                  >
-                    {cat}
-                  </button>
-                );
-              })}
+          <div className="bg-[#0E1318]/80 border-b border-white/10 shrink-0">
+            <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-3">
+              <div className="flex flex-wrap gap-2">
+                {CATEGORIES.map((cat) => {
+                  const isActive = activeCategory === cat;
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => {
+                        setActiveCategory(cat);
+                        if (cat !== 'MUSIC') {
+                          setActiveMusicGenre('ALL GENRES');
+                        }
+                      }}
+                      className={clsx(
+                        'px-3.5 py-1 rounded-lg font-mono text-xs font-semibold tracking-wider border transition-all cursor-pointer',
+                        isActive
+                          ? cat === 'MUSIC'
+                            ? 'bg-[#B497FF]/22 text-[#E5DAFF] border-[#B497FF]/55 shadow-[0_2px_12px_rgba(180,151,255,0.2)]'
+                            : 'bg-[#42AEA3]/20 text-[#8CF0E6] border-[#42AEA3]/50 shadow-[0_2px_12px_rgba(66,174,163,0.18)]'
+                          : 'bg-white/[0.03] text-neutral-400 border-white/10 hover:text-neutral-100 hover:border-white/25'
+                      )}
+                    >
+                      {cat}
+                    </button>
+                  );
+                })}
+              </div>
+              <span className="font-mono text-[11px] text-neutral-400">
+                {filteredReviews.length} {filteredReviews.length === 1 ? 'ENTRY' : 'ENTRIES'}
+              </span>
             </div>
-            <span className="font-mono text-[11px] text-neutral-400">
-              {filteredReviews.length} {filteredReviews.length === 1 ? 'ENTRY' : 'ENTRIES'}
-            </span>
+
+            {activeCategory === 'MUSIC' && (
+              <div className="flex flex-wrap items-center gap-1.5 px-6 pb-3 pt-0.5">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-neutral-500 mr-1">
+                  Genre:
+                </span>
+                {musicGenres.map((genre) => {
+                  const isActive = activeMusicGenre === genre;
+                  return (
+                    <button
+                      key={genre}
+                      type="button"
+                      onClick={() => setActiveMusicGenre(genre)}
+                      className={clsx(
+                        'px-2.5 py-1 rounded-full font-mono text-[10px] font-medium border transition-all cursor-pointer',
+                        isActive
+                          ? 'bg-[#B497FF]/25 text-[#EFE9FF] border-[#B497FF]/60 shadow-[0_2px_10px_rgba(180,151,255,0.18)]'
+                          : 'bg-white/[0.02] text-neutral-400 border-white/10 hover:text-neutral-200 hover:border-white/25'
+                      )}
+                    >
+                      {genre}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
 
@@ -323,6 +508,11 @@ export default function LoungeDashboardModal({
                     >
                       {selectedReview.category}
                     </span>
+                    {selectedReview.genre && (
+                      <span className="px-2.5 py-0.5 rounded-md font-mono text-[11px] font-medium border border-[#B497FF]/35 bg-[#B497FF]/12 text-[#E5DAFF]">
+                        {selectedReview.genre}
+                      </span>
+                    )}
                     <span className="font-mono text-xs text-neutral-400">
                       {selectedReview.creator} • {selectedReview.year}
                     </span>
@@ -331,6 +521,25 @@ export default function LoungeDashboardModal({
                   <h3 className="font-display text-2xl md:text-3xl font-bold text-white leading-tight">
                     {selectedReview.title}
                   </h3>
+
+                  {selectedReview.artists?.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {selectedReview.artists.map((artist) => (
+                        <span
+                          key={artist.name}
+                          className={clsx(
+                            'px-2.5 py-1 rounded-full font-mono text-[11px] font-semibold border',
+                            artist.inspo
+                              ? 'bg-gradient-to-r from-[#D66370]/30 to-[#B497FF]/30 border-[#D66370]/60 text-white'
+                              : 'bg-white/[0.04] border-white/15 text-neutral-200'
+                          )}
+                        >
+                          {artist.name}
+                          {artist.inspo ? ' ★ Inspo' : ''}
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
                   <p className="text-base text-neutral-300 leading-relaxed">
                     {selectedReview.hook}
@@ -418,9 +627,33 @@ export default function LoungeDashboardModal({
                       <h3 className="font-display text-lg font-bold text-white group-hover:text-[#7DE2D7] transition-colors">
                         {item.title}
                       </h3>
+                      {item.genre && (
+                        <p className="font-mono text-[10px] uppercase tracking-wider text-[#D8CAFF] mt-1">
+                          {item.genre}
+                        </p>
+                      )}
                       <p className="font-mono text-[11px] text-neutral-400 mt-0.5 mb-2.5">
                         {item.creator}
                       </p>
+
+                      {item.artists?.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mb-2.5">
+                          {item.artists.map((artist) => (
+                            <span
+                              key={artist.name}
+                              className={clsx(
+                                'px-2 py-0.5 rounded-full font-mono text-[10px] border',
+                                artist.inspo
+                                  ? 'bg-[#D66370]/25 border-[#D66370]/55 text-[#FFD2D7] font-semibold'
+                                  : 'bg-white/[0.04] border-white/10 text-neutral-200'
+                              )}
+                            >
+                              {artist.name}
+                              {artist.inspo ? ' ★' : ''}
+                            </span>
+                          ))}
+                        </div>
+                      )}
 
                       <p className="text-sm text-neutral-300/90 leading-relaxed line-clamp-2">
                         {item.hook}
@@ -446,6 +679,220 @@ export default function LoungeDashboardModal({
                 ))}
               </div>
             )
+          ) : activeTab === 'aesthetics' ? (
+            /* Aesthetics Library — Collected Movements, Palettes & Visual Motifs */
+            <div className="space-y-5">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-white/10">
+                <p className="text-xs sm:text-sm text-neutral-300">
+                  Visual movements, nostalgic textures, and graphic eras I collect as moodboards for 3D rooms, shaders, and brand identity work.
+                </p>
+                <span className="font-mono text-[11px] text-[#F6E5AF] bg-[#C7AF6E]/15 border border-[#C7AF6E]/35 px-2.5 py-0.5 rounded-full shrink-0">
+                  {loungeAesthetics.length} COLLECTED
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                {loungeAesthetics.map((item) => (
+                  <article
+                    key={item.id}
+                    className="flex flex-col justify-between p-4 rounded-2xl bg-[#131920]/90 border border-white/10 shadow-[0_14px_34px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.07)] hover:border-white/25 transition-all"
+                  >
+                    <div>
+                      <AestheticSpecimenBanner item={item} />
+
+                      <div className="flex items-center justify-between gap-2 mt-3.5 mb-2">
+                        <span className="font-mono text-[10px] font-semibold px-2 py-0.5 rounded bg-white/10 text-neutral-200">
+                          {item.code}
+                        </span>
+                        <span className="font-mono text-[10px] text-neutral-400 truncate">
+                          {item.era}
+                        </span>
+                      </div>
+
+                      <h3 className="font-display text-lg font-bold text-white">
+                        {item.title}
+                      </h3>
+
+                      <p className="mt-2 text-xs sm:text-sm leading-relaxed text-neutral-300">
+                        {item.summary}
+                      </p>
+
+                      {/* Palette Swatches */}
+                      <div className="mt-4">
+                        <p className="font-mono text-[10px] uppercase tracking-wider text-neutral-400 mb-1.5">
+                          Core Palette
+                        </p>
+                        <div className="grid grid-cols-4 gap-1.5">
+                          {item.palette.map((hex) => (
+                            <div
+                              key={hex}
+                              className="flex flex-col items-center gap-1"
+                            >
+                              <span
+                                className="w-full h-5 rounded-md border border-white/15 shadow-inner"
+                                style={{ backgroundColor: hex }}
+                              />
+                              <span className="font-mono text-[9px] text-neutral-400">
+                                {hex}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Key Motifs */}
+                      <div className="mt-3.5 flex flex-wrap gap-1.5">
+                        {item.motifs.map((motif) => (
+                          <span
+                            key={motif}
+                            className="px-2 py-0.5 rounded-md font-mono text-[10px] bg-white/[0.04] border border-white/10 text-neutral-200"
+                          >
+                            {motif}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 pt-3 border-t border-white/10">
+                      <p className="font-mono text-[10px] uppercase tracking-wider text-[#66D1C6] font-semibold mb-1">
+                        Studio Application
+                      </p>
+                      <p className="text-xs leading-relaxed text-neutral-300">
+                        {item.studioNote}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          ) : activeTab === 'art' ? (
+            /* Art Library — Visual Artists, Illustrators & Linework Inspo */
+            <div className="space-y-5">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-white/10">
+                <p className="text-xs sm:text-sm text-neutral-300">
+                  Illustrators, painters, and visual storytellers whose linework, color courage, and physical mediums inspire my sketchbook and painting practice.
+                </p>
+                <span className="font-mono text-[11px] text-[#D5FAD0] bg-[#AEE8A2]/15 border border-[#AEE8A2]/35 px-2.5 py-0.5 rounded-full shrink-0">
+                  {loungeArtReferences.length} COLLECTED
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 gap-5">
+                {loungeArtReferences.map((item) => (
+                  <article
+                    key={item.id}
+                    className="rounded-2xl p-5 sm:p-6 bg-[#131920]/90 border border-white/10 shadow-[0_14px_34px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.07)] grid grid-cols-1 md:grid-cols-12 gap-5 items-stretch"
+                  >
+                    {/* Bold Pop-Art / Linework Specimen Frame */}
+                    <div
+                      className="md:col-span-5 rounded-xl border border-white/15 p-4 flex flex-col justify-between min-h-[210px] relative overflow-hidden"
+                      style={{
+                        background:
+                          'radial-gradient(circle at 20% 25%, rgba(255,94,91,0.35), transparent 52%), radial-gradient(circle at 82% 78%, rgba(45,212,191,0.28), transparent 52%), linear-gradient(145deg, #1E1B4B 0%, #11161C 100%)',
+                      }}
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-mono text-[10px] font-semibold px-2 py-0.5 rounded bg-black/45 border border-white/15 text-[#FFCE45]">
+                          {item.code}
+                        </span>
+                        <span className="font-mono text-[10px] uppercase tracking-wider text-neutral-200/80">
+                          Pop Art • Mixed Media
+                        </span>
+                      </div>
+
+                      <div className="my-auto py-4">
+                        <div className="inline-block px-3.5 py-1.5 rounded-xl bg-[#FFCE45] text-[#111827] font-display text-xl font-extrabold tracking-tight border-2 border-[#111827] shadow-[4px_4px_0px_#FF5E5B]">
+                          GAWX ART
+                        </div>
+                        <p className="mt-3 font-mono text-[11px] text-neutral-200/90">
+                          {item.discipline}
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="font-mono text-[10px] uppercase tracking-wider text-neutral-300/75 mb-1.5">
+                          Signature Color Pop
+                        </p>
+                        <div className="grid grid-cols-4 gap-1.5">
+                          {item.palette.map((hex) => (
+                            <span
+                              key={hex}
+                              title={hex}
+                              className="h-4 rounded border border-white/25"
+                              style={{ backgroundColor: hex }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Artist Breakdown & Mediums */}
+                    <div className="md:col-span-7 flex flex-col justify-between space-y-4">
+                      <div>
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <h3 className="font-display text-2xl font-bold text-white">
+                            {item.artist}
+                          </h3>
+                          <span className="px-2.5 py-0.5 rounded-full font-mono text-[10px] font-semibold border border-[#AEE8A2]/45 bg-[#AEE8A2]/15 text-[#D5FAD0]">
+                            Artist Inspo ★
+                          </span>
+                        </div>
+
+                        <p className="mt-2.5 text-sm leading-relaxed text-neutral-300">
+                          {item.summary}
+                        </p>
+
+                        <div className="mt-4">
+                          <p className="font-mono text-[10px] uppercase tracking-wider text-neutral-400 mb-1.5">
+                            Core Mediums
+                          </p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {item.mediums.map((medium) => (
+                              <span
+                                key={medium}
+                                className="px-2.5 py-1 rounded-full font-mono text-[11px] bg-[#AEE8A2]/12 border border-[#AEE8A2]/35 text-[#D5FAD0]"
+                              >
+                                {medium}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="mt-3.5">
+                          <p className="font-mono text-[10px] uppercase tracking-wider text-neutral-400 mb-1.5">
+                            Visual Signatures
+                          </p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {item.signatures.map((sig) => (
+                              <span
+                                key={sig}
+                                className="px-2 py-0.5 rounded-md font-mono text-[10px] bg-white/[0.04] border border-white/10 text-neutral-200"
+                              >
+                                {sig}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-3 border-t border-white/10 space-y-2">
+                        <p className="text-xs leading-relaxed text-neutral-300">
+                          <span className="font-mono text-[10px] uppercase tracking-wider text-[#66D1C6] font-semibold mr-1.5">
+                            Why It Inspires Me:
+                          </span>
+                          {item.craftNotes}
+                        </p>
+                        {item.quote && (
+                          <p className="text-xs italic text-neutral-400">
+                            &ldquo;{item.quote}&rdquo;
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
           ) : (
             /* About Livie — Dimensional Dark Glass + Personal Brand Gradient Accents */
             <div className="grid grid-cols-1 md:grid-cols-12 gap-5">

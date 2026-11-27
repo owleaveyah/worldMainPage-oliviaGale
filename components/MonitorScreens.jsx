@@ -115,6 +115,7 @@ const CATEGORY_BADGE_HEX = {
   GAMES: '#42AEA3',
   FILMS: '#D66370',
   CAMPAIGNS: '#AEE8A2',
+  MUSIC: '#B497FF',
 };
 
 function buildIpadReviewSlides() {
@@ -164,7 +165,7 @@ function buildIpadReviewSlides() {
           ctx.fillStyle = '#9CA3AF';
           ctx.font = 'bold 14px monospace';
           ctx.fillText(
-            `${review.channelCode || `CH-0${idx + 1}`} / 0${loungeReviews.length}`,
+            `${review.channelCode || `CH-${String(idx + 1).padStart(2, '0')}`} / ${String(loungeReviews.length).padStart(2, '0')}`,
             w - 132,
             40
           );
