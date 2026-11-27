@@ -250,6 +250,26 @@ export const loungeReviews = [
     },
     quote: 'Scale isn’t created by adding more objects; it’s created by leaving room to breathe.',
   },
+  {
+    id: 'spider-verse',
+    channelCode: 'CH-20',
+    category: 'FILMS',
+    title: 'Spider-Man: Into & Across the Spider-Verse',
+    creator: 'Sony Pictures Animation',
+    year: '2018 / 2023',
+    coverImage: null,
+    hook: 'Breaking 3D photorealism wide open with painterly shaders, halftone print dots, and stepped on-twos motion.',
+    tags: ['NPRShaders', 'Animation', 'ColorScripting'],
+    breakdown: {
+      visualDirection:
+        'Fuses real-time-inspired non-photorealistic rendering with Ben-Day halftones, hand-drawn ink hatching, chromatic aberration, and radical dimension-specific palettes (from Earth-1610’s neon comic grit to Gwen’s watercolor mood-ring world).',
+      narrativeDesign:
+        'Uses frame-rate contrast (animating Miles on twos until he masters his leap on ones) as pure visual character growth—making technical animation choices carry emotional weight.',
+      creativeTakeaway:
+        'Constantly pushes how I approach stylized PBR + GLSL shaders, bold color scripting, and letting painterly 2D brushwork live naturally inside 3D space.',
+    },
+    quote: 'Every frame looks like an illustration that refused to stay trapped inside a static page.',
+  },
 
   // ========================
   // CAMPAIGNS

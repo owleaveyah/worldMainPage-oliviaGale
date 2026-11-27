@@ -234,6 +234,46 @@ function AestheticSpecimenBanner({ item }) {
           </div>
         </div>
       )}
+
+      {item.specimenType === 'backrooms' && (
+        <div
+          className="w-full h-full relative flex flex-col justify-between p-3.5 overflow-hidden"
+          style={{
+            background:
+              'linear-gradient(180deg, #9f9354 0%, #c6b66c 54%, #6a613c 55%, #463f27 100%)',
+          }}
+        >
+          {/* Mono-yellow vertical wallpaper stripes on upper wall */}
+          <div
+            className="absolute inset-x-0 top-0 h-[55%] opacity-25 pointer-events-none"
+            style={{
+              backgroundImage:
+                'repeating-linear-gradient(90deg, rgba(60,52,22,0.45) 0px, rgba(60,52,22,0.45) 2px, transparent 2px, transparent 16px)',
+            }}
+          />
+          {/* Recessed fluorescent ceiling glow panels */}
+          <div className="relative flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="w-10 h-2.5 rounded-[2px] bg-[#fffbe0] shadow-[0_0_16px_rgba(255,248,185,0.9)]" />
+              <span className="w-10 h-2.5 rounded-[2px] bg-[#fffbe0]/75 shadow-[0_0_10px_rgba(255,248,185,0.55)]" />
+            </div>
+            <span className="inline-flex items-center gap-1 font-mono text-[10px] font-bold tracking-wider text-[#fffbe0] bg-black/50 px-2 py-0.5 rounded">
+              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+              REC // LVL-0
+            </span>
+          </div>
+          {/* Corridor partition silhouette & timestamp */}
+          <div className="absolute left-1/2 -translate-x-1/2 top-[18%] bottom-[38%] w-16 border-x border-[#4a4225]/40 bg-[#9b8d4d]/45 pointer-events-none" />
+          <div className="relative flex items-end justify-between">
+            <span className="px-2 py-0.5 rounded bg-black/55 border border-[#D8C87A]/40 font-mono text-[10px] font-semibold text-[#EFE4AE]">
+              LIMINAL // 600M SQ MI
+            </span>
+            <span className="font-mono text-[10px] text-[#fffbe0]/85 bg-black/45 px-1.5 py-0.5 rounded">
+              00:04:19
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -1114,6 +1154,14 @@ export default function LoungeDashboardModal({
                   </button>
                 </div>
               </section>
+
+              {/* Studio Colophon & Copyright */}
+              <footer className="md:col-span-12 px-2 pt-1 pb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] font-mono text-neutral-400 border-t border-white/10">
+                <span>&copy; 2026 Olivia Gale Gerochi. All rights reserved.</span>
+                <span>
+                  From the mind of Olivia Gale — my creative brainchild, built with Blender, Three.js, React Three Fiber, Next.js &amp; Tailwind CSS.
+                </span>
+              </footer>
             </div>
           )}
         </div>

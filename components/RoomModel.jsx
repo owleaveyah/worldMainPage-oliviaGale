@@ -255,10 +255,21 @@ const PROCEDURAL_MATERIAL_OVERRIDES = {
     clearNormalMap: true,
   },
   'Rough Plastic': {
-    color: '#3c414a',
+    color: '#505764',
     clearMap: true,
-    roughness: 0.72,
+    roughness: 0.58,
     metalness: 0,
+  },
+  'Matte Black Plastic': {
+    color: '#3b414c',
+    clearMap: true,
+    roughness: 0.52,
+    metalness: 0.06,
+  },
+  'Fabric Mesh': {
+    sheen: 0.45,
+    sheenRoughness: 0.72,
+    sheenColor: '#b0b7c0',
   },
   'Grip plastic': {
     color: '#20242b',
@@ -315,6 +326,15 @@ function applyProceduralMaterialOverride(mat) {
       if (override.emissiveIntensity !== undefined && 'emissiveIntensity' in mat) {
         mat.emissiveIntensity = override.emissiveIntensity;
       }
+    }
+    if (override.sheen !== undefined && 'sheen' in mat) {
+      mat.sheen = override.sheen;
+    }
+    if (override.sheenRoughness !== undefined && 'sheenRoughness' in mat) {
+      mat.sheenRoughness = override.sheenRoughness;
+    }
+    if (override.sheenColor && 'sheenColor' in mat && mat.sheenColor) {
+      mat.sheenColor.set(override.sheenColor);
     }
     mat.needsUpdate = true;
     return;

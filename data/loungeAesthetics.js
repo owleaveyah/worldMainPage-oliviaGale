@@ -59,4 +59,24 @@ export const loungeAesthetics = [
     studioNote:
       'Sharpens how I strip brand systems and editorial layouts (like Printpack & Cuadro) down to unmistakable silhouettes and visual rhythm.',
   },
+  {
+    id: 'backrooms-liminal',
+    code: 'AE-04',
+    title: 'The Backrooms & Liminal Spaces',
+    era: '2019–Present Digital Uncanny',
+    specimenType: 'backrooms',
+    accent: '#D8C87A',
+    palette: ['#D8C87A', '#B5A158', '#6B6342', '#1C1B15'],
+    motifs: [
+      'Mono-Yellow Wallpaper',
+      'Fluorescent Hum',
+      'Damp Carpet',
+      'Infinite Corridors',
+      'VHS Found Footage',
+    ],
+    summary:
+      'Turns mundane, empty commercial architecture—flickering recessed ceiling panels, endless beige partitions, damp office carpet, and analog camcorder grain (famously pushed into 3D cinema by Kane Pixels)—into uncanny psychological dread.',
+    studioNote:
+      'Fascinates me as a 3D environment study: proving how minimal modular geometry, fluorescent bounce lighting, and subtle surface grime can make an ordinary room feel unforgettable.',
+  },
 ];

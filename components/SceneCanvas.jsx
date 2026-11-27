@@ -133,6 +133,9 @@ function SceneLoadingOverlay({ isDarkMode, sceneReady }) {
           />
         </div>
 
+        <p className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-emerald-500 font-semibold mb-1">
+          From the Mind of Olivia Gale
+        </p>
         <p className="font-display text-sm sm:text-base font-semibold tracking-wide">
           {statusLabel}
         </p>
@@ -154,7 +157,7 @@ function SceneLoadingOverlay({ isDarkMode, sceneReady }) {
         </div>
 
         <div className="mt-2 w-full flex items-center justify-between font-mono text-[11px] opacity-70">
-          <span>Interactive 3D Portfolio</span>
+          <span>Interactive 3D Brainchild</span>
           <span>{pct}%</span>
         </div>
 

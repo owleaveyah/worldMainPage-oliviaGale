@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { ChevronDown, ChevronUp, ArrowUpRight } from 'lucide-react';
 import TopNav from '@/components/TopNav';
 import ContactPill from '@/components/ContactPill';
+import SiteColophon from '@/components/SiteColophon';
 import PortfolioModal, { STATION_PORTFOLIOS } from '@/components/PortfolioModal';
 import clsx from 'clsx';
 
@@ -284,6 +285,9 @@ export default function HomePage() {
 
       {/* Recruiter Floating Contact Drawer */}
       <ContactPill isDarkMode={isDarkMode} />
+
+      {/* Subtle Copyright & Studio Brainchild Colophon Indicator */}
+      <SiteColophon isDarkMode={isDarkMode} />
 
       {/* Station Portfolio Website Popup */}
       <PortfolioModal
