@@ -1,9 +1,11 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { ExternalLink, X, Palette, Monitor } from 'lucide-react';
+import { ExternalLink, X, Palette, Monitor, Stamp, Tablet } from 'lucide-react';
 import clsx from 'clsx';
 import { withBasePath } from '@/lib/assetPath';
+import BrandDossierModal from './BrandDossierModal';
+import LoungeDashboardModal from './LoungeDashboardModal';
 
 export const STATION_PORTFOLIOS = {
   ART: {
@@ -30,13 +32,39 @@ export const STATION_PORTFOLIOS = {
     iframeBgClass: 'bg-neutral-950',
     Icon: Monitor,
   },
+  BRAND: {
+    title: 'Brand & Identity Archive',
+    subtitle: 'Olivia Gale Gerochi • Editorial Systems, Packaging & Print',
+    ariaLabel: 'Brand and Identity Archive',
+    closeAriaLabel: 'Close brand archive',
+    hoverPrompt: 'Click corkboard to open Brand & Identity Archive',
+    zoomedActionLabel: '✦ Click the corkboard or bed proofs (or here) to open Brand & Identity Archive',
+    zoomingLabel: 'Zooming to brand studio…',
+    Icon: Stamp,
+  },
+  LOUNGE: {
+    title: "Livie's Culture Lounge Dashboard",
+    subtitle: 'Olivia Gale Gerochi • Craft Reviews, Culture & Studio Lore',
+    ariaLabel: "Livie's Culture Lounge Dashboard",
+    closeAriaLabel: 'Close Culture Lounge dashboard',
+    hoverPrompt: "Click iPad to open Livie's Culture Lounge",
+    zoomedActionLabel: "✦ Click the lounge iPad (or here) to open Livie's Culture Lounge",
+    zoomingLabel: 'Zooming to lounge…',
+    Icon: Tablet,
+  },
 };
 
-export default function PortfolioModal({ stationId, onClose, isDarkMode }) {
+export default function PortfolioModal({
+  stationId,
+  initialReviewId = null,
+  onClose,
+  isDarkMode,
+  onOpenStationPortfolio,
+}) {
   const portfolio = stationId ? STATION_PORTFOLIOS[stationId] : null;
 
   useEffect(() => {
-    if (!portfolio) return;
+    if (!portfolio || stationId === 'BRAND' || stationId === 'LOUNGE') return;
 
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
@@ -46,9 +74,26 @@ export default function PortfolioModal({ stationId, onClose, isDarkMode }) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [portfolio, onClose]);
+  }, [portfolio, stationId, onClose]);
 
   if (!portfolio) return null;
+
+  if (stationId === 'BRAND') {
+    return <BrandDossierModal onClose={onClose} isDarkMode={isDarkMode} />;
+  }
+
+  if (stationId === 'LOUNGE') {
+    return (
+      <LoungeDashboardModal
+        onClose={onClose}
+        isDarkMode={isDarkMode}
+        initialReviewId={initialReviewId}
+        onOpenFineArt={
+          onOpenStationPortfolio ? () => onOpenStationPortfolio('ART') : undefined
+        }
+      />
+    );
+  }
 
   const { url, title, subtitle, ariaLabel, closeAriaLabel, iframeBgClass, Icon } = portfolio;
 

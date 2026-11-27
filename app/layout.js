@@ -20,7 +20,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  title: "Olivia Gale — 3D Technical Artist & Designer",
+  title: "Olivia Gale — 3D Generalist, Designer, and Artist",
   description: "Interactive 3D isometric bedroom portfolio showcasing real-time graphics, tactile fine art, and brand systems.",
 };
 

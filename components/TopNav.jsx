@@ -54,7 +54,7 @@ export default function TopNav({ activeStation, onSelectStation, isDarkMode, onT
                 isDarkMode ? 'text-neutral-300' : 'text-neutral-600'
               )}
             >
-              3D Technical Artist & Designer
+              3D Generalist, Designer, and Artist
             </span>
           </div>
         </div>

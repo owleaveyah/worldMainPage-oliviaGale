@@ -24,7 +24,7 @@ export default function ContactPill({ isDarkMode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const email = 'olivia.gale.creative@gmail.com';
+  const email = 'livieph@gmail.com';
 
   const copyEmail = () => {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {

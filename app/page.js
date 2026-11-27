@@ -46,16 +46,31 @@ export default function HomePage() {
   const [settledStation, setSettledStation] = useState('OVERVIEW');
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [openPortfolioStation, setOpenPortfolioStation] = useState(null);
+  const [openLoungeReviewId, setOpenLoungeReviewId] = useState(null);
   const [hoveredHotspotStation, setHoveredHotspotStation] = useState(null);
+
+  const handleOpenStationPortfolio = useCallback((stationId, reviewId = null) => {
+    setOpenLoungeReviewId(reviewId);
+    setOpenPortfolioStation(stationId);
+  }, []);
+
+  const handleClosePortfolio = useCallback(() => {
+    setOpenPortfolioStation(null);
+    setOpenLoungeReviewId(null);
+  }, []);
 
   const handleSelectStation = useCallback((nextStation) => {
     setActiveStation((prev) => {
       if (prev === nextStation) return prev;
       setSettledStation(null);
       setHoveredHotspotStation(null);
-      setOpenPortfolioStation((openStation) =>
-        openStation && openStation !== nextStation ? null : openStation
-      );
+      setOpenPortfolioStation((openStation) => {
+        if (openStation && openStation !== nextStation) {
+          setOpenLoungeReviewId(null);
+          return null;
+        }
+        return openStation;
+      });
       return nextStation;
     });
   }, []);
@@ -75,7 +90,7 @@ export default function HomePage() {
     <main
       className={clsx(
         'relative w-screen h-screen overflow-hidden select-none transition-colors duration-500',
-        isDarkMode ? 'bg-[#0f1115] text-neutral-100' : 'bg-[#f5f3ef] text-neutral-900'
+        isDarkMode ? 'bg-[#0f1115] text-neutral-100' : 'bg-[#f4ead6] text-neutral-900'
       )}
     >
       {/* Top HUD Navigation */}
@@ -94,7 +109,7 @@ export default function HomePage() {
           isDarkMode={isDarkMode}
           settledSection={settledStation}
           onArriveSection={handleArriveSection}
-          onOpenStationPortfolio={setOpenPortfolioStation}
+          onOpenStationPortfolio={handleOpenStationPortfolio}
           onHoverHotspot={setHoveredHotspotStation}
         />
       </div>
@@ -154,7 +169,7 @@ export default function HomePage() {
                 {isStationZoomed ? (
                   <button
                     type="button"
-                    onClick={() => setOpenPortfolioStation(activeStation)}
+                    onClick={() => handleOpenStationPortfolio(activeStation)}
                     className="text-left text-sm text-emerald-500 hover:text-emerald-400 font-medium underline underline-offset-4 cursor-pointer"
                   >
                     {activePortfolioConfig.zoomedActionLabel}
@@ -191,7 +206,9 @@ export default function HomePage() {
       {/* Station Portfolio Website Popup */}
       <PortfolioModal
         stationId={openPortfolioStation}
-        onClose={() => setOpenPortfolioStation(null)}
+        initialReviewId={openLoungeReviewId}
+        onClose={handleClosePortfolio}
+        onOpenStationPortfolio={handleOpenStationPortfolio}
         isDarkMode={isDarkMode}
       />
     </main>
