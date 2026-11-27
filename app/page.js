@@ -20,24 +20,24 @@ const SceneCanvas = dynamic(() => import('@/components/SceneCanvas'), {
 
 const STATION_INFO = {
   TECH: {
-    title: '3D Technical & Real-time Pipelines',
+    title: '3D and 2D Art Development & Real-time Pipelines',
     desc: 'Interactive shader authoring, PBR workflows, Unreal Engine / WebGL integration, procedural modeling.',
     tags: ['Three.js', 'R3F', 'GLSL', 'Blender', 'Substance Painter'],
   },
   ART: {
     title: 'Tactile Fine Arts & Oil Studies',
-    desc: 'Traditional oil on canvas, physical pigment chemistry, digital painting, anatomical draftsmanship.',
+    desc: 'Traditional oil on canvas, physical pigment chemistry, anatomical draftsmanship.',
     tags: ['Oil Mediums', 'Color Theory', 'Composition', 'Fine Arts'],
   },
   BRAND: {
-    title: 'Brand Archetypes & Editorial Print',
-    desc: 'Design systems, publication layouts, packaging prototypes, typography, luxury brand strategy.',
-    tags: ['Typography', 'Editorial', 'Visual Identity', 'Packaging'],
+    title: 'Brand Archetypes & Visual Identity',
+    desc: 'Design systems, visual identity, packaging prototypes, typography, and print strategy.',
+    tags: ['Typography', 'Design Systems', 'Visual Identity', 'Packaging'],
   },
   LOUNGE: {
-    title: 'Game Culture, Research & Collaboration',
-    desc: 'Interactive storytelling, game mechanics analysis, research reports, creative direction inquiries.',
-    tags: ['Game Design', 'Creative Direction', 'Open for Roles'],
+    title: 'Culture, Trends, and Media Digest',
+    desc: 'Books, games, films, music by genre, collected aesthetics, art references, and personal studio lore.',
+    tags: ['Media Digest', 'Aesthetics', 'Music & Art', 'Studio Lore'],
   },
 };
 
