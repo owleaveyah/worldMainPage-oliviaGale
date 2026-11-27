@@ -3,13 +3,12 @@
 import React, { useEffect } from 'react';
 import { ExternalLink, X, Palette, Monitor, Stamp, Tablet } from 'lucide-react';
 import clsx from 'clsx';
-import { withBasePath } from '@/lib/assetPath';
 import BrandDossierModal from './BrandDossierModal';
 import LoungeDashboardModal from './LoungeDashboardModal';
 
 export const STATION_PORTFOLIOS = {
   ART: {
-    url: withBasePath('/theartofgale/index.html'),
+    url: 'https://owleaveyah.github.io/theartofgale/',
     title: 'The Art of Gale — Painting Portfolio',
     subtitle: 'Olivia Gale Gerochi • Fine Arts & Illustration',
     ariaLabel: 'The Art of Gale Painting Portfolio',

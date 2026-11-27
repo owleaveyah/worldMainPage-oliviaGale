@@ -1012,7 +1012,7 @@ export default function LoungeDashboardModal({
                       if (onOpenFineArt) {
                         onOpenFineArt();
                       } else {
-                        window.open(withBasePath('/theartofgale/index.html'), '_blank', 'noopener,noreferrer');
+                        window.open('https://owleaveyah.github.io/theartofgale/', '_blank', 'noopener,noreferrer');
                       }
                     }}
                     className="group w-full text-left flex items-center gap-3 rounded-xl p-3 bg-[#0E1318]/85 border border-white/10 hover:border-[#AEE8A2]/55 hover:bg-[#171E26] transition-all cursor-pointer"
