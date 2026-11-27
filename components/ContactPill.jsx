@@ -92,7 +92,7 @@ export default function ContactPill({ isDarkMode }) {
           {/* External Social Profiles */}
           <div className="mt-4 pt-3.5 border-t border-neutral-200/50 dark:border-neutral-800/80 flex items-center justify-between">
             <a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/in/olivia-gale-gerochi-4aab9029a"
               target="_blank"
               rel="noreferrer"
               className={clsx(
@@ -104,7 +104,7 @@ export default function ContactPill({ isDarkMode }) {
               <span>LinkedIn</span>
             </a>
             <a
-              href="https://artstation.com"
+              href="https://www.artstation.com/gnocchi_gerochi6"
               target="_blank"
               rel="noreferrer"
               className={clsx(
@@ -116,7 +116,7 @@ export default function ContactPill({ isDarkMode }) {
               <span>ArtStation</span>
             </a>
             <a
-              href="https://github.com"
+              href="https://github.com/owleaveyah"
               target="_blank"
               rel="noreferrer"
               className={clsx(

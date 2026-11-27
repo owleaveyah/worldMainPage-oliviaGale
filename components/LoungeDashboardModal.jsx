@@ -1030,7 +1030,7 @@ export default function LoungeDashboardModal({
                   </a>
 
                   <a
-                    href="https://linkedin.com"
+                    href="https://www.linkedin.com/in/olivia-gale-gerochi-4aab9029a"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group flex items-center gap-3 rounded-xl p-3 bg-[#0E1318]/85 border border-white/10 hover:border-[#42AEA3]/55 hover:bg-[#171E26] transition-all"
@@ -1064,9 +1064,26 @@ export default function LoungeDashboardModal({
                       <div className="text-xs font-bold flex items-center gap-1 text-white">
                         The Art of Gale <ExternalLink className="w-3 h-3 opacity-50 group-hover:opacity-100" />
                       </div>
-                      <div className="text-[11px] font-mono text-neutral-400 truncate">ArtStation &amp; Fine Art</div>
+                      <div className="text-[11px] font-mono text-neutral-400 truncate">Painting &amp; Illustration Portfolio</div>
                     </div>
                   </button>
+
+                  <a
+                    href="https://www.artstation.com/gnocchi_gerochi6"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-3 rounded-xl p-3 bg-[#0E1318]/85 border border-white/10 hover:border-[#38BDF8]/55 hover:bg-[#171E26] transition-all"
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#13AFF0] to-[#2563EB] text-white flex items-center justify-center shrink-0 shadow-sm font-display text-xs font-bold">
+                      AS
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-xs font-bold flex items-center gap-1 text-white">
+                        ArtStation <ExternalLink className="w-3 h-3 opacity-50 group-hover:opacity-100" />
+                      </div>
+                      <div className="text-[11px] font-mono text-neutral-400 truncate">@gnocchi_gerochi6 • 3D &amp; Visual Art</div>
+                    </div>
+                  </a>
                 </div>
               </section>
 
