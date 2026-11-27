@@ -35,12 +35,12 @@ export default function ContactPill({ isDarkMode }) {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-30 flex flex-col items-end pointer-events-auto">
+    <div className="fixed bottom-3.5 right-4 sm:bottom-6 sm:right-6 z-30 flex flex-col items-end pointer-events-auto">
       {/* Expanded Drawer Card */}
       {isOpen && (
         <div
           className={clsx(
-            'mb-3 w-96 p-5 rounded-2xl border backdrop-blur-xl shadow-2xl transition-all duration-200 animate-in fade-in slide-in-from-bottom-2',
+            'mb-2.5 sm:mb-3 w-[calc(100vw-2rem)] max-w-sm sm:w-96 p-4 sm:p-5 rounded-2xl border backdrop-blur-xl shadow-2xl transition-all duration-200 animate-in fade-in slide-in-from-bottom-2',
             isDarkMode
               ? 'bg-neutral-900/90 border-neutral-800 text-neutral-100'
               : 'bg-white/90 border-neutral-200 text-neutral-900'
@@ -136,20 +136,20 @@ export default function ContactPill({ isDarkMode }) {
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={clsx(
-          'flex items-center gap-3 py-1.5 transition-all duration-200 cursor-pointer group bg-transparent border-0',
+          'flex items-center gap-2 sm:gap-3 py-1.5 transition-all duration-200 cursor-pointer group bg-transparent border-0',
           isDarkMode
             ? 'text-neutral-200 hover:text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.55)]'
             : 'text-neutral-700 hover:text-neutral-950 drop-shadow-[0_1px_6px_rgba(255,255,255,0.7)]'
         )}
       >
-        <span className="flex h-3 w-3 relative">
+        <span className="flex h-2.5 w-2.5 sm:h-3 sm:w-3 relative">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-emerald-500"></span>
         </span>
-        <span className="font-display text-base lg:text-lg font-semibold tracking-wide group-hover:underline underline-offset-4">
+        <span className="font-display text-sm sm:text-base lg:text-lg font-semibold tracking-wide group-hover:underline underline-offset-4">
           {isOpen ? 'Close Contact' : 'Get in Touch'}
         </span>
-        <MessageSquare className="w-5 h-5 text-neutral-400 group-hover:text-emerald-400 transition-colors" />
+        <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-400 group-hover:text-emerald-400 transition-colors" />
       </button>
     </div>
   );

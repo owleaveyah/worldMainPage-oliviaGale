@@ -303,12 +303,12 @@ export default function LoungeDashboardModal({
       aria-modal="true"
       aria-label="Livie's Culture Lounge Dashboard"
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-3 sm:p-6 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-2 sm:p-6 animate-in fade-in duration-200"
     >
       {/* Sleek Dark Tablet Frame with Ambient Brand Gradient Depth */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-4xl max-h-[89vh] flex flex-col rounded-[28px] border border-white/15 bg-[#0C1014] text-neutral-100 shadow-[0_28px_80px_rgba(0,0,0,0.85)] overflow-hidden"
+        className="relative w-full max-w-4xl max-h-[92dvh] sm:max-h-[89vh] flex flex-col rounded-2xl sm:rounded-[28px] border border-white/15 bg-[#0C1014] text-neutral-100 shadow-[0_28px_80px_rgba(0,0,0,0.85)] overflow-hidden"
         style={{
           backgroundImage:
             'radial-gradient(circle at 8% 6%, rgba(214,99,112,0.18), transparent 38%), radial-gradient(circle at 52% 10%, rgba(174,232,162,0.10), transparent 40%), radial-gradient(circle at 92% 92%, rgba(66,174,163,0.20), transparent 42%), radial-gradient(circle at 14% 90%, rgba(199,175,110,0.12), transparent 36%)',
@@ -320,7 +320,7 @@ export default function LoungeDashboardModal({
         {/* Header Bar */}
         <div className="bg-[#11161C]/85 border-b border-white/10 backdrop-blur-xl shrink-0">
           {/* Status Strip */}
-          <div className="flex items-center justify-between px-6 pt-2.5 pb-1 text-[11px] font-mono text-neutral-400">
+          <div className="flex items-center justify-between px-4 sm:px-6 pt-2.5 pb-1 text-[11px] font-mono text-neutral-400">
             <div className="flex items-center gap-2.5">
               <span className="font-semibold text-[#66D1C6]">LivieOS</span>
               <span className="text-white/25">•</span>
@@ -334,19 +334,19 @@ export default function LoungeDashboardModal({
           </div>
 
           {/* Main Header Controls */}
-          <div className="flex flex-wrap items-center justify-between gap-3 px-6 pb-4 pt-1.5">
-            <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#66D1C6] font-semibold">
+          <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 px-4 sm:px-6 pb-3 sm:pb-4 pt-1.5">
+            <div className="min-w-0">
+              <p className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-[#66D1C6] font-semibold">
                 {TAB_HEADERS[activeTab]?.eyebrow}
               </p>
-              <h2 className="font-display text-xl md:text-2xl font-bold tracking-tight text-white mt-0.5">
+              <h2 className="font-display text-lg sm:text-xl md:text-2xl font-bold tracking-tight text-white mt-0.5 leading-snug">
                 {TAB_HEADERS[activeTab]?.title}
               </h2>
             </div>
 
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center justify-between w-full sm:w-auto gap-2 sm:gap-2.5">
               {/* Segmented Pill Switcher */}
-              <div className="inline-flex flex-wrap p-1 rounded-xl bg-[#090C10] border border-white/10 shadow-inner">
+              <div className="no-scrollbar inline-flex items-center overflow-x-auto max-w-full p-1 rounded-xl bg-[#090C10] border border-white/10 shadow-inner">
                 <button
                   type="button"
                   onClick={() => setActiveTab('screening')}

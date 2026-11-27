@@ -24,6 +24,12 @@ export const metadata = {
   description: "Interactive 3D isometric bedroom portfolio showcasing real-time graphics, tactile fine art, and brand systems.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export default function RootLayout({ children }) {
   return (
     <html

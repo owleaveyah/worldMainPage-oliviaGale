@@ -102,12 +102,12 @@ export default function PortfolioModal({
       aria-modal="true"
       aria-label={ariaLabel}
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/65 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-black/65 backdrop-blur-sm animate-in fade-in duration-200"
     >
       <div
         onClick={(e) => e.stopPropagation()}
         className={clsx(
-          'w-full max-w-6xl h-[88vh] rounded-2xl border overflow-hidden flex flex-col shadow-2xl transition-colors',
+          'w-full max-w-6xl h-[92dvh] sm:h-[88vh] rounded-xl sm:rounded-2xl border overflow-hidden flex flex-col shadow-2xl transition-colors',
           isDarkMode
             ? 'bg-neutral-900 border-neutral-700 text-neutral-100'
             : 'bg-white border-neutral-200 text-neutral-900'

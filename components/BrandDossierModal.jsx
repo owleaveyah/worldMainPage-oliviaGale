@@ -33,16 +33,16 @@ export default function BrandDossierModal({ onClose }) {
       role="dialog"
       aria-modal="true"
       aria-label="Brand and Identity Editorial Archive"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 md:p-6 animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4 md:p-6 animate-in fade-in duration-150"
       onClick={onClose}
     >
       {/* Swiss Editorial Container */}
       <div
-        className="relative w-full max-w-5xl max-h-[88vh] flex flex-col bg-[#FAF3E6] text-[#1F2937] border border-[#1F2937] shadow-2xl overflow-hidden"
+        className="relative w-full max-w-5xl max-h-[92dvh] md:max-h-[88vh] flex flex-col bg-[#FAF3E6] text-[#1F2937] border border-[#1F2937] shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Studio Index Header */}
-        <div className="flex items-center justify-between gap-3 px-6 py-4 border-b border-[#1F2937] bg-[#F3E8D2] shrink-0">
+        <div className="flex items-center justify-between gap-2 sm:gap-3 px-3.5 py-3 sm:px-6 sm:py-4 border-b border-[#1F2937] bg-[#F3E8D2] shrink-0">
           <div className="flex items-center gap-4 min-w-0">
             <span className="font-mono text-xs uppercase tracking-widest px-2 py-0.5 border border-[#1F2937] bg-[#FAF3E6] shrink-0">
               BRAND &amp; IDENTITY ARCHIVE

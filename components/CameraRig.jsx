@@ -37,6 +37,17 @@ function setFallbackPose(key, outPos, outTarget, outFov) {
   outFov.current = fallback.fov;
 }
 
+function getResponsiveFov(baseFov, width, height) {
+  if (!width || !height) return baseFov;
+  const aspect = width / height;
+  if (aspect >= 1) return baseFov;
+  // Widen vertical FOV on portrait mobile viewports so horizontal room/station framing isn't cropped
+  const clampedScale = Math.max(0.56, aspect * 1.15);
+  const rad = THREE.MathUtils.degToRad(baseFov);
+  const expanded = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(rad / 2) / clampedScale));
+  return Math.min(72, Math.max(baseFov, expanded));
+}
+
 /**
  * Resolves a Blender-exported glTF camera, accounting for Blender's
  * `<CamName>_Orientation` child node that carries the actual lens transform.
@@ -85,7 +96,7 @@ export default function CameraRig({
   activeSection,
   onArriveSection,
 }) {
-  const { camera } = useThree();
+  const { camera, size } = useThree();
   const { cameras, scene } = useGLTF(ROOM_MODEL_URL);
   const controlsRef = useRef();
   const onArriveRef = useRef(onArriveSection);
@@ -138,6 +149,8 @@ export default function CameraRig({
 
     readCamAndLookAt('OVERVIEW', pullbackPos.current, pullbackTarget.current, pullbackFov);
     readCamAndLookAt(normalizedSection, finalPos.current, finalTarget.current, finalFov);
+    pullbackFov.current = getResponsiveFov(pullbackFov.current, size.width, size.height);
+    finalFov.current = getResponsiveFov(finalFov.current, size.width, size.height);
 
     if (isFirstLoad.current) {
       // Snap immediately on initial mount so the camera doesn't start over the lounge table
@@ -160,7 +173,7 @@ export default function CameraRig({
       hasNotifiedArrive.current = false;
       phase.current = normalizedSection === 'OVERVIEW' ? 'zoomin' : 'pullback';
     }
-  }, [normalizedSection, cameras, scene, camera]);
+  }, [normalizedSection, cameras, scene, camera, size.width, size.height]);
 
   useFrame((_, delta) => {
     if (phase.current === 'idle' || !controlsRef.current) return;

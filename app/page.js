@@ -89,7 +89,7 @@ export default function HomePage() {
   return (
     <main
       className={clsx(
-        'relative w-screen h-screen overflow-hidden select-none transition-colors duration-500',
+        'relative w-full h-[100dvh] overflow-hidden select-none transition-colors duration-500',
         isDarkMode ? 'bg-[#0f1115] text-neutral-100' : 'bg-[#f4ead6] text-neutral-900'
       )}
     >
@@ -102,7 +102,7 @@ export default function HomePage() {
       />
 
       {/* 3D Scene Viewport */}
-      <div className="w-full h-full absolute inset-0">
+      <div className="w-full h-full absolute inset-0 touch-none">
         <SceneCanvas
           activeView={activeStation}
           setActiveView={handleSelectStation}
@@ -114,12 +114,12 @@ export default function HomePage() {
         />
       </div>
 
-      {/* Station Hotspot Hover Prompt (Only when zoomed into a portfolio station & hovering its target) */}
+      {/* Station Hotspot Hover Prompt (Desktop hover while zoomed in) */}
       {isStationZoomed &&
         hoveredHotspotStation === activeStation &&
         hoveredPortfolioConfig &&
         !openPortfolioStation && (
-          <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-30 pointer-events-none animate-in fade-in duration-150">
+          <div className="hidden md:block fixed bottom-24 left-1/2 -translate-x-1/2 z-30 pointer-events-none animate-in fade-in duration-150">
             <div
               className={clsx(
                 'flex items-center gap-2.5 text-base sm:text-lg font-display font-medium tracking-wide',
@@ -136,57 +136,59 @@ export default function HomePage() {
 
       {/* Active Station Info Drawer / Card (Displays when zoomed into a station) */}
       {activeMeta && (
-        <div className="fixed bottom-6 left-6 z-30 max-w-lg pointer-events-none animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <div className="fixed bottom-14 left-3 right-3 sm:right-auto sm:bottom-6 sm:left-6 z-30 sm:max-w-lg pointer-events-none animate-in fade-in slide-in-from-bottom-2 duration-300">
           <div
             className={clsx(
-              'p-5 rounded-2xl border backdrop-blur-xl shadow-xl pointer-events-auto transition-all',
+              'p-3.5 sm:p-5 rounded-2xl border backdrop-blur-xl shadow-xl pointer-events-auto transition-all max-h-[38dvh] overflow-y-auto sm:max-h-none',
               isDarkMode
-                ? 'bg-neutral-900/80 border-neutral-800 text-neutral-100'
-                : 'bg-white/80 border-neutral-200 text-neutral-900'
+                ? 'bg-neutral-900/85 border-neutral-800 text-neutral-100'
+                : 'bg-white/85 border-neutral-200 text-neutral-900'
             )}
           >
-            <div className="flex items-center justify-between gap-4 mb-1.5">
-              <span className="text-xs font-mono tracking-wider uppercase text-emerald-500 font-semibold">
+            <div className="flex items-center justify-between gap-4 mb-1 sm:mb-1.5">
+              <span className="text-[11px] sm:text-xs font-mono tracking-wider uppercase text-emerald-500 font-semibold">
                 Zone Active: {activeStation}
               </span>
               <button
                 type="button"
                 onClick={() => handleSelectStation('OVERVIEW')}
                 className={clsx(
-                  'text-sm font-medium underline underline-offset-4 cursor-pointer transition-colors',
+                  'text-xs sm:text-sm font-medium underline underline-offset-4 cursor-pointer transition-colors shrink-0',
                   isDarkMode ? 'text-neutral-300 hover:text-white' : 'text-neutral-600 hover:text-neutral-950'
                 )}
               >
                 ← Overview
               </button>
             </div>
-            <h2 className="font-display text-lg font-semibold tracking-tight">{activeMeta.title}</h2>
-            <p className={clsx('mt-1.5 text-[15px] leading-relaxed', isDarkMode ? 'text-neutral-300' : 'text-neutral-600')}>
+            <h2 className="font-display text-base sm:text-lg font-semibold tracking-tight leading-snug">
+              {activeMeta.title}
+            </h2>
+            <p className={clsx('mt-1 sm:mt-1.5 text-xs sm:text-[15px] leading-relaxed', isDarkMode ? 'text-neutral-300' : 'text-neutral-600')}>
               {activeMeta.desc}
             </p>
             {activePortfolioConfig && (
-              <div className="mt-3">
+              <div className="mt-2.5 sm:mt-3">
                 {isStationZoomed ? (
                   <button
                     type="button"
                     onClick={() => handleOpenStationPortfolio(activeStation)}
-                    className="text-left text-sm text-emerald-500 hover:text-emerald-400 font-medium underline underline-offset-4 cursor-pointer"
+                    className="text-left text-xs sm:text-sm text-emerald-500 hover:text-emerald-400 font-medium underline underline-offset-4 cursor-pointer"
                   >
                     {activePortfolioConfig.zoomedActionLabel}
                   </button>
                 ) : (
-                  <p className="text-sm text-emerald-500/90 font-medium">
+                  <p className="text-xs sm:text-sm text-emerald-500/90 font-medium">
                     {activePortfolioConfig.zoomingLabel}
                   </p>
                 )}
               </div>
             )}
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-2.5 sm:mt-4 flex flex-wrap gap-1.5 sm:gap-2">
               {activeMeta.tags.map((tag) => (
                 <span
                   key={tag}
                   className={clsx(
-                    'px-2.5 py-1 text-xs rounded-md font-mono',
+                    'px-2 py-0.5 sm:px-2.5 sm:py-1 text-[11px] sm:text-xs rounded-md font-mono',
                     isDarkMode
                       ? 'bg-neutral-800/80 text-neutral-300'
                       : 'bg-neutral-200/70 text-neutral-700'

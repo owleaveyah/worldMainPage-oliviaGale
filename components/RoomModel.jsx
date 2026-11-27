@@ -143,13 +143,22 @@ const INTERACTIVE_TARGETS = {
   Lounge_Zine2: 'LOUNGE',
 };
 
-// Restore Blender procedural materials that glTF exports without baked baseColorTexture/Mix nodes
+// Material overrides for untextured Blender procedural shaders, broken shared AO/dust maps,
+// and greyscale bump maps mistakenly exported into glTF normalTexture slots
 const PROCEDURAL_MATERIAL_OVERRIDES = {
   'White Painted Wood': {
     color: '#f4f0e8',
     clearMap: true,
+    clearNormalMap: true,
     roughness: 0.42,
     metalness: 0,
+  },
+  'White Metallic Pearl Car Paint': {
+    color: '#e8ecf2',
+    clearMap: true,
+    roughness: 0.26,
+    metalness: 0.25,
+    clearcoat: 1,
   },
   'Off White Plastic Glossy': {
     color: '#f3efe8',
@@ -165,9 +174,17 @@ const PROCEDURAL_MATERIAL_OVERRIDES = {
   },
   'Emerald Jade': {
     color: '#1b8a68',
+    clearMap: true,
     roughness: 0.16,
     metalness: 0.05,
     clearcoat: 0.75,
+  },
+  // Used solely by Tech_B5_Folio_Open's outer cover (was Calfskin Leather Pine Green in backup GLB)
+  'Paper.1002': {
+    color: '#1f4837',
+    clearMap: true,
+    roughness: 0.58,
+    metalness: 0,
   },
   'Electronic matte plastic': {
     color: '#252930',
@@ -176,46 +193,95 @@ const PROCEDURAL_MATERIAL_OVERRIDES = {
   },
   'Stainless Steel': {
     color: '#cfd5dc',
+    clearMap: true,
     roughness: 0.22,
     metalness: 0.88,
   },
+  'Brown Metal': {
+    color: '#5a3d30',
+    clearMap: true,
+    roughness: 0.35,
+    metalness: 0.75,
+  },
   'Turquoise Toy Plastic': {
     color: '#18b8b3',
+    clearMap: true,
     roughness: 0.25,
     metalness: 0,
   },
   'Car Blue Metallic Paint': {
     color: '#2563eb',
+    clearMap: true,
     roughness: 0.22,
     metalness: 0.65,
   },
   'Green Velvet': {
     color: '#2d6a4f',
+    clearMap: true,
     roughness: 0.88,
     metalness: 0,
   },
   'Procedral Brown Silk': {
     color: '#7a543c',
+    clearMap: true,
     roughness: 0.45,
     metalness: 0.03,
   },
+  Linen: {
+    color: '#e6dfd3',
+    clearMap: true,
+    roughness: 0.85,
+    metalness: 0,
+  },
   'Translucent Stylised Light Teal Plastic': {
     color: '#58c9c2',
+    clearMap: true,
+    clearNormalMap: true,
     emissive: '#000000',
     emissiveIntensity: 0,
     roughness: 0.22,
     metalness: 0,
   },
+  'Sage green textured paper': {
+    clearNormalMap: true,
+  },
+  'Book Cover Fabric Red': {
+    clearNormalMap: true,
+  },
+  'Carbon Fiber Orange': {
+    clearNormalMap: true,
+  },
+  'Tech gold metal': {
+    clearNormalMap: true,
+  },
   'Rough Plastic': {
     color: '#3c414a',
+    clearMap: true,
     roughness: 0.72,
     metalness: 0,
   },
+  'Grip plastic': {
+    color: '#20242b',
+    clearMap: true,
+    roughness: 0.78,
+    metalness: 0,
+  },
+  'Procedural glass material for every use': {
+    color: '#e8f1f5',
+    clearMap: true,
+    transparent: true,
+    opacity: 0.32,
+    roughness: 0.1,
+    metalness: 0,
+    depthWrite: false,
+  },
   'Transparent plastic (Plastic)': {
     color: '#e8f1f5',
+    clearMap: true,
     transparent: true,
     opacity: 0.35,
     roughness: 0.1,
+    metalness: 0,
     depthWrite: false,
   },
   glass: {
@@ -231,9 +297,29 @@ function applyProceduralMaterialOverride(mat) {
   const override = mat?.name ? PROCEDURAL_MATERIAL_OVERRIDES[mat.name] : null;
   if (!override) return;
 
-  if (override.clearMap) {
+  if (override.clearNormalMap && mat.normalMap) {
+    mat.normalMap = null;
+  }
+  if (override.clearMap && mat.map) {
     mat.map = null;
   }
+
+  // Preserve valid baked PBR maps (e.g., White Painted Wood, Sage green textured paper)
+  // unless clearMap explicitly stripped a broken shared AO/dust mask.
+  const hasBakedMaps = Boolean(
+    mat.map || mat.normalMap || mat.roughnessMap || mat.metalnessMap
+  );
+  if (hasBakedMaps && !override.clearMap) {
+    if (override.emissive && !mat.emissiveMap && mat.emissive) {
+      mat.emissive.set(override.emissive);
+      if (override.emissiveIntensity !== undefined && 'emissiveIntensity' in mat) {
+        mat.emissiveIntensity = override.emissiveIntensity;
+      }
+    }
+    mat.needsUpdate = true;
+    return;
+  }
+
   if (override.color && mat.color) {
     mat.color.set(override.color);
   }
@@ -492,6 +578,29 @@ export default function RoomModel({
           mat.opacity = 0.22;
           mat.roughness = 0.08;
           mat.depthWrite = false;
+        }
+      } else if (findAncestorMatch(child, ['Tech_Glass_IcedMatcha'])) {
+        child.castShadow = false;
+        child.receiveShadow = false;
+        for (const mat of mats) {
+          if (!mat) continue;
+          if (mat.name === 'Electronic matte plastic' || mat.name === 'glass') {
+            mat.color.set('#e8f1f5');
+            mat.transparent = true;
+            mat.opacity = 0.28;
+            mat.roughness = 0.08;
+            mat.metalness = 0;
+            mat.depthWrite = false;
+            mat.needsUpdate = true;
+          } else if (mat.name === 'Ice Cube') {
+            if ('transmission' in mat) mat.transmission = 0;
+            mat.color.set('#eef8ff');
+            mat.transparent = true;
+            mat.opacity = 0.55;
+            mat.roughness = 0.12;
+            mat.depthWrite = false;
+            mat.needsUpdate = true;
+          }
         }
       } else if (lowerName.includes('glass')) {
         child.castShadow = false;
