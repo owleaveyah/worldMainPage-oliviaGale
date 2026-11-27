@@ -2,6 +2,7 @@
 
 import React, { useCallback, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { ChevronDown, ChevronUp, ArrowUpRight } from 'lucide-react';
 import TopNav from '@/components/TopNav';
 import ContactPill from '@/components/ContactPill';
 import PortfolioModal, { STATION_PORTFOLIOS } from '@/components/PortfolioModal';
@@ -48,6 +49,7 @@ export default function HomePage() {
   const [openPortfolioStation, setOpenPortfolioStation] = useState(null);
   const [openLoungeReviewId, setOpenLoungeReviewId] = useState(null);
   const [hoveredHotspotStation, setHoveredHotspotStation] = useState(null);
+  const [mobileCardExpanded, setMobileCardExpanded] = useState(false);
 
   const handleOpenStationPortfolio = useCallback((stationId, reviewId = null) => {
     setOpenLoungeReviewId(reviewId);
@@ -60,6 +62,7 @@ export default function HomePage() {
   }, []);
 
   const handleSelectStation = useCallback((nextStation) => {
+    setMobileCardExpanded(false);
     setActiveStation((prev) => {
       if (prev === nextStation) return prev;
       setSettledStation(null);
@@ -134,31 +137,108 @@ export default function HomePage() {
           </div>
         )}
 
-      {/* Active Station Info Drawer / Card (Displays when zoomed into a station) */}
+      {/* Active Station Info Drawer / Card (Compact single-row bar on mobile by default so the 3D station stays unobstructed) */}
       {activeMeta && (
         <div className="fixed bottom-14 left-3 right-3 sm:right-auto sm:bottom-6 sm:left-6 z-30 sm:max-w-lg pointer-events-none animate-in fade-in slide-in-from-bottom-2 duration-300">
+          {/* Mobile Compact Bar (shown on < sm when collapsed) */}
+          {!mobileCardExpanded && (
+            <div
+              className={clsx(
+                'sm:hidden flex items-center justify-between gap-2 px-3 py-2 rounded-xl border backdrop-blur-xl shadow-lg pointer-events-auto',
+                isDarkMode
+                  ? 'bg-neutral-900/80 border-neutral-800 text-neutral-100'
+                  : 'bg-white/80 border-neutral-200 text-neutral-900'
+              )}
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-[10px] font-mono tracking-wider uppercase px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-500 font-semibold shrink-0">
+                  {activeStation}
+                </span>
+                {activePortfolioConfig && isStationZoomed ? (
+                  <button
+                    type="button"
+                    onClick={() => handleOpenStationPortfolio(activeStation)}
+                    className="inline-flex items-center gap-1 text-xs font-medium text-emerald-400 hover:text-emerald-300 truncate cursor-pointer"
+                  >
+                    <span className="truncate">Open Portfolio</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
+                  </button>
+                ) : (
+                  <span className="text-xs font-medium text-emerald-500/90 truncate">
+                    {activePortfolioConfig?.zoomingLabel || activeMeta.title}
+                  </span>
+                )}
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setMobileCardExpanded(true)}
+                  aria-label="Expand station details"
+                  className={clsx(
+                    'inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-mono border cursor-pointer transition-colors',
+                    isDarkMode
+                      ? 'border-neutral-700 text-neutral-300 hover:bg-neutral-800'
+                      : 'border-neutral-300 text-neutral-700 hover:bg-neutral-100'
+                  )}
+                >
+                  <span>Info</span>
+                  <ChevronUp className="w-3 h-3" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSelectStation('OVERVIEW')}
+                  className={clsx(
+                    'text-xs font-medium underline underline-offset-4 cursor-pointer transition-colors',
+                    isDarkMode ? 'text-neutral-300 hover:text-white' : 'text-neutral-600 hover:text-neutral-950'
+                  )}
+                >
+                  Overview
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Full Station Info Card (always visible on sm+; toggled via Info on mobile) */}
           <div
             className={clsx(
+              mobileCardExpanded ? 'block' : 'hidden sm:block',
               'p-3.5 sm:p-5 rounded-2xl border backdrop-blur-xl shadow-xl pointer-events-auto transition-all max-h-[38dvh] overflow-y-auto sm:max-h-none',
               isDarkMode
                 ? 'bg-neutral-900/85 border-neutral-800 text-neutral-100'
                 : 'bg-white/85 border-neutral-200 text-neutral-900'
             )}
           >
-            <div className="flex items-center justify-between gap-4 mb-1 sm:mb-1.5">
+            <div className="flex items-center justify-between gap-3 mb-1 sm:mb-1.5">
               <span className="text-[11px] sm:text-xs font-mono tracking-wider uppercase text-emerald-500 font-semibold">
                 Zone Active: {activeStation}
               </span>
-              <button
-                type="button"
-                onClick={() => handleSelectStation('OVERVIEW')}
-                className={clsx(
-                  'text-xs sm:text-sm font-medium underline underline-offset-4 cursor-pointer transition-colors shrink-0',
-                  isDarkMode ? 'text-neutral-300 hover:text-white' : 'text-neutral-600 hover:text-neutral-950'
-                )}
-              >
-                ← Overview
-              </button>
+              <div className="flex items-center gap-3 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setMobileCardExpanded(false)}
+                  aria-label="Minimize station details"
+                  className={clsx(
+                    'sm:hidden inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono border cursor-pointer',
+                    isDarkMode
+                      ? 'border-neutral-700 text-neutral-300'
+                      : 'border-neutral-300 text-neutral-700'
+                  )}
+                >
+                  <span>Hide</span>
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSelectStation('OVERVIEW')}
+                  className={clsx(
+                    'text-xs sm:text-sm font-medium underline underline-offset-4 cursor-pointer transition-colors shrink-0',
+                    isDarkMode ? 'text-neutral-300 hover:text-white' : 'text-neutral-600 hover:text-neutral-950'
+                  )}
+                >
+                  ← Overview
+                </button>
+              </div>
             </div>
             <h2 className="font-display text-base sm:text-lg font-semibold tracking-tight leading-snug">
               {activeMeta.title}

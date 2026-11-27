@@ -1,8 +1,11 @@
 'use client';
 
-import React, { Suspense, useEffect, useMemo, useState } from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
+import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { useProgress } from '@react-three/drei';
 import * as THREE from 'three';
+import clsx from 'clsx';
+import { withBasePath } from '@/lib/assetPath';
 import SceneLighting from './SceneLighting';
 import CameraRig from './CameraRig';
 import RoomModel from './RoomModel';
@@ -66,6 +69,108 @@ function ExposureController({ isDarkMode }) {
   return null;
 }
 
+// Signals once the Suspense-wrapped 3D scene has mounted and rendered its first frames
+function SceneReadySignal({ onReady }) {
+  const framesRef = useRef(0);
+  const doneRef = useRef(false);
+
+  useFrame(() => {
+    if (doneRef.current) return;
+    framesRef.current += 1;
+    if (framesRef.current >= 2) {
+      doneRef.current = true;
+      onReady?.();
+    }
+  });
+
+  return null;
+}
+
+function SceneLoadingOverlay({ isDarkMode, sceneReady }) {
+  const { active, progress, loaded, total } = useProgress();
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    if (!sceneReady) return;
+    const timer = setTimeout(() => setDismissed(true), 700);
+    return () => clearTimeout(timer);
+  }, [sceneReady]);
+
+  if (dismissed) return null;
+
+  const pct = sceneReady ? 100 : Math.min(99, Math.max(progress > 0 ? Math.round(progress) : 8, 8));
+  const statusLabel = sceneReady
+    ? 'Studio ready'
+    : !active || pct >= 95
+    ? 'Preparing lighting & materials…'
+    : total > 0
+    ? `Loading 3D studio (${loaded}/${total} assets)…`
+    : 'Loading 3D studio…';
+
+  return (
+    <div
+      aria-live="polite"
+      className={clsx(
+        'fixed inset-0 z-30 flex flex-col items-center justify-center px-6 transition-opacity duration-700',
+        sceneReady ? 'opacity-0 pointer-events-none' : 'opacity-100',
+        isDarkMode ? 'bg-[#0f1115]/95 text-neutral-100' : 'bg-[#f4ead6]/95 text-neutral-900'
+      )}
+    >
+      <div className="w-full max-w-xs sm:max-w-sm flex flex-col items-center text-center">
+        <div className="relative mb-5 flex items-center justify-center">
+          <div
+            className={clsx(
+              'w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 animate-spin',
+              isDarkMode
+                ? 'border-neutral-800 border-t-emerald-400'
+                : 'border-neutral-300 border-t-emerald-600'
+            )}
+          />
+          <img
+            src={withBasePath('/images/og-logo.png')}
+            alt=""
+            className="w-10 h-10 sm:w-12 sm:h-12 object-contain absolute"
+          />
+        </div>
+
+        <p className="font-display text-sm sm:text-base font-semibold tracking-wide">
+          {statusLabel}
+        </p>
+
+        {/* Progress Bar */}
+        <div
+          className={clsx(
+            'mt-3.5 w-full h-1.5 rounded-full overflow-hidden',
+            isDarkMode ? 'bg-neutral-800' : 'bg-neutral-300/80'
+          )}
+        >
+          <div
+            className={clsx(
+              'h-full rounded-full transition-all duration-300 ease-out',
+              isDarkMode ? 'bg-emerald-400' : 'bg-emerald-600'
+            )}
+            style={{ width: `${pct}%` }}
+          />
+        </div>
+
+        <div className="mt-2 w-full flex items-center justify-between font-mono text-[11px] opacity-70">
+          <span>Interactive 3D Portfolio</span>
+          <span>{pct}%</span>
+        </div>
+
+        <p
+          className={clsx(
+            'mt-5 text-[11px] sm:text-xs font-mono tracking-wide',
+            isDarkMode ? 'text-neutral-400' : 'text-neutral-600'
+          )}
+        >
+          Drag to orbit • Pinch or scroll to zoom • Tap a station
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function SceneCanvas({
   activeView,
   setActiveView,
@@ -79,6 +184,8 @@ export default function SceneCanvas({
     nightstand: null,
     artCeiling: null,
   });
+  const [sceneReady, setSceneReady] = useState(false);
+  const handleSceneReady = useCallback(() => setSceneReady(true), []);
 
   return (
     <div className="w-full h-full relative">
@@ -117,8 +224,10 @@ export default function SceneCanvas({
             onHoverHotspot={onHoverHotspot}
             onLightsLoaded={setLightPositions}
           />
+          <SceneReadySignal onReady={handleSceneReady} />
         </Suspense>
       </Canvas>
+      <SceneLoadingOverlay isDarkMode={isDarkMode} sceneReady={sceneReady} />
     </div>
   );
 }
